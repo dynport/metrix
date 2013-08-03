@@ -1,0 +1,18 @@
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        1      2 127.0.0.1:49155         0.0.0.0:*               LISTEN      10747/docker
+tcp        0      0 127.0.0.1:49156         0.0.0.0:*               LISTEN      10747/docker
+tcp        0      0 10.0.3.1:53             0.0.0.0:*               LISTEN      3283/dnsmasq
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      659/sshd
+tcp        0    240 192.168.0.8:22          10.8.0.10:54235         ESTABLISHED 13128/1
+tcp6       0      0 :::4243                 :::*                    LISTEN      10747/docker
+tcp6       0      0 fe80::146f:ecff:fe76:53 :::*                    LISTEN      3283/dnsmasq
+tcp6       0      0 :::22                   :::*                    LISTEN      659/sshd
+tcp6       0      0 192.168.0.8:4243        10.8.0.10:61326         ESTABLISHED 10747/docker
+udp        0      0 0.0.0.0:53672           0.0.0.0:*                           21535/rsyslogd
+udp        0      0 0.0.0.0:37821           0.0.0.0:*                           705/dhclient
+udp        0      0 10.0.3.1:53             0.0.0.0:*                           3283/dnsmasq
+udp        0      0 0.0.0.0:67              0.0.0.0:*                           3283/dnsmasq
+udp        0      0 0.0.0.0:68              0.0.0.0:*                           705/dhclient
+udp6       0      0 fe80::146f:ecff:fe76:53 :::*                                3283/dnsmasq
+udp6       0      0 :::32832                :::*                                705/dhclient

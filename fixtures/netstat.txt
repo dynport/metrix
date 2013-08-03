@@ -1,0 +1,73 @@
+Ip:
+    162673 total packets received
+    28083 forwarded
+    1 incoming packets discarded
+    134590 incoming packets delivered
+    160313 requests sent out
+Icmp:
+    44 ICMP messages received
+    2 input ICMP message failed.
+    ICMP input histogram:
+        destination unreachable: 3
+        echo requests: 1
+        echo replies: 40
+    172 ICMP messages sent
+    0 ICMP messages failed
+    ICMP output histogram:
+        destination unreachable: 131
+        echo request: 40
+        echo replies: 1
+IcmpMsg:
+        InType0: 40
+        InType3: 3
+        InType8: 1
+        OutType0: 1
+        OutType3: 131
+        OutType8: 40
+Tcp:
+    233 active connections openings
+    413 passive connection openings
+    5 failed connection attempts
+    2 connection resets received
+    1 connections established
+    133969 segments received
+    131397 segments send out
+    87 segments retransmited
+    7 bad segments received.
+    24 resets sent
+Udp:
+    574 packets received
+    3 packets to unknown port received.
+    0 packet receive errors
+    574 packets sent
+UdpLite:
+TcpExt:
+    1 resets received for embryonic SYN_RECV sockets
+    208 TCP sockets finished time wait in fast timer
+    686 delayed acks sent
+    3 delayed acks further delayed because of locked socket
+    Quick ack mode was activated 3 times
+    199 packets directly queued to recvmsg prequeue.
+    7365 packet headers predicted
+    100212 acknowledgments not containing data payload received
+    16219 predicted acknowledgments
+    15 times recovered from packet loss by selective acknowledgements
+    6 congestion windows recovered without slow start after partial ack
+    2 timeouts after SACK recovery
+    38 fast retransmits
+    3 forward retransmits
+    8 retransmits in slow start
+    23 other TCP timeouts
+    3 DSACKs sent for old packets
+    3 DSACKs received
+    4 connections reset due to unexpected data
+    1 connections reset due to early user close
+    1 connections aborted due to timeout
+    TCPDSACKIgnoredNoUndo: 2
+    TCPSackShiftFallback: 264
+    TCPDeferAcceptDrop: 21
+    TCPRcvCoalesce: 508
+    TCPOFOQueue: 45
+IpExt:
+    InOctets: 400666043
+    OutOctets: 667161104

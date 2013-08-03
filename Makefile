@@ -1,0 +1,24 @@
+GIT_COMMIT = $(shell git rev-parse --short HEAD)
+GIT_STATUS = $(shell test -n "`git status --porcelain`" && echo "+CHANGES")
+BASE_PACKAGES = constants.go util.go output.go metric.go metrix.go metrics_collection.go metric_handler.go logger.go optparse.go table.go
+COLLECTORS = loadavg.go memory.go cpu.go disk.go processes.go net.go df.go riak.go elasticsearch.go redis.go postgres.go pgbouncer.go nginx.go
+BUILD_CMD = go build -a -ldflags "-X main.GITCOMMIT $(GIT_COMMIT)$(GIT_STATUS)"
+
+default: all
+
+install_dependencies:
+	go get github.com/remogatto/prettytest
+	go get github.com/lib/pq
+
+clean:
+	rm -f bin/*
+
+test:
+	go test -v $(BASE_PACKAGES) $(COLLECTORS) *_test.go
+
+jenkins: clean test all
+	PROC_ROOT=./fixtures ./bin/metrix --loadavg --disk --memory --processes --cpu
+	./bin/metrix --loadavg --disk --memory --processes --cpu --keys
+
+all:
+	go build -o bin/metrix metrix-cli.go $(BASE_PACKAGES) $(COLLECTORS)
