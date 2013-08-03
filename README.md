@@ -2,13 +2,26 @@
 
 Metrics collector written in golang
 
+## Requirements
+
+You need to have go 1.1 and some build tools installed. This can be done in ubuntu like this (make sure `universe` is enabled):
+	
+	apt-get install -y bzr git-core build-essential
+	cd /opt
+	curl -OL https://go.googlecode.com/files/go1.1.1.linux-amd64.tar.gz
+	tar xvfz go1.1.1.linux-amd64.tar.gz
+	export GOROOT=/opt/go
+	export GOPATH=/go
+
 ## Installation
+    
+Building of the binary needs to only be done once. You can just copy it to any linux system and run it without any extra dependencies.
 
-You need to have go 1.1 installed (see http://golang.org/doc/install)
-
-    git clone git@github.com:dynport/metrix.git
+    git clone git@github.com:dynport/metrix.git /tmp/metrix
+    cd /tmp/metrix
+    make install_dependencies
     make
-    make install
+    make install    
 
 
 ## Examples
