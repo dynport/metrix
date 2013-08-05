@@ -6,6 +6,8 @@ BUILD_CMD = go build -a -ldflags "-X main.GITCOMMIT $(GIT_COMMIT)$(GIT_STATUS)"
 
 default: all
 
+wip: test
+
 install_dependencies:
 	go get github.com/remogatto/prettytest
 	go get github.com/lib/pq
