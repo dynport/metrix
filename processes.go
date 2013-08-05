@@ -2,6 +2,7 @@ package main
 
 import (
 	"path/filepath"
+	"regexp"
 	"io/ioutil"
 	"strings"
 	"strconv"
@@ -65,6 +66,11 @@ func (self *Processes) Keys() []string {
 	}
 }
 
+func NormalizeProcessName(comm string) string {
+	withoutBrackes := regexp.MustCompile("(^\\(|\\)$)").ReplaceAllString(comm, "")
+	return strings.Split(withoutBrackes, "/")[0]
+}
+
 func (self *Processes) Collect(c* MetricsCollection) (e error) {
 	matches, e := filepath.Glob(ProcRoot() + "/proc/[0-9]*/stat")
 	if e != nil {
@@ -77,6 +83,7 @@ func (self *Processes) Collect(c* MetricsCollection) (e error) {
 				"pid": chunks[0],
 				"ppid": chunks[3],
 				"comm": chunks[1],
+				"name": NormalizeProcessName(chunks[1]),
 				"state": chunks[2],
 			}
 			for idx, v := range chunks {
