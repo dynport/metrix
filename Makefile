@@ -19,7 +19,7 @@ clean:
 test:
 	go test -v $(BASE_PACKAGES) $(COLLECTORS) *_test.go
 
-jenkins: clean test all
+jenkins: clean install_dependencies test all
 	PROC_ROOT=./fixtures ./bin/metrix --loadavg --disk --memory --processes --cpu
 	./bin/metrix --loadavg --disk --memory --processes --cpu --keys
 
