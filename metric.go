@@ -308,6 +308,13 @@ func (m* Metric) Graphite(t time.Time, hostname string) (r string) {
 			}
 		}
 	}
+	if strings.HasPrefix(key, "processes.") {
+		pid, _ := m.Tags["pid"]
+		name, _ := m.Tags["name"]
+		if name != "" && pid != "" {
+			key = strings.Replace(key, "processes.", "processes." + name + "." + pid + ".", 1)
+		}
+	}
 	r = fmt.Sprintf("metrix.hosts.%s.%s %d %d", hostname, key, m.Value, t.Unix())
 	return
 }

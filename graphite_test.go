@@ -17,4 +17,7 @@ func (t *testSuite) TestGraphite() {
 
 	m = &Metric{Key: "df.inodes.Use", Value: int64(10), Tags: map[string]string { "file_system": "/dev/sda" }}
 	t.Equal(m.Graphite(theTime, "test.host"), "metrix.hosts.test.host.df.dev.sda.inodes.Use 10 11")
+
+	m = &Metric{Key: "processes.Utime", Value: int64(10), Tags: map[string]string { "name": "init", "pid": "10" }}
+	t.Equal(m.Graphite(theTime, "test.host"), "metrix.hosts.test.host.processes.init.10.Utime 10 11")
 }
