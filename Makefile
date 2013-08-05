@@ -11,6 +11,7 @@ wip: test
 install_dependencies:
 	go get github.com/remogatto/prettytest
 	go get github.com/lib/pq
+	go get github.com/stretchr/testify/assert
 
 clean:
 	rm -f bin/*
