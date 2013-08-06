@@ -20,6 +20,14 @@ type PgBouncer struct {
 }
 
 func (self *PgBouncer) Collect(c* MetricsCollection) (e error) {
+	chunks := strings.Split(self.Address, ":")
+	if len(chunks) == 2 {
+		self.Address = chunks[0]
+		self.Port, _ = strconv.Atoi(chunks[1])
+	} else {
+		self.Address = chunks[0]
+		self.Port = 6432
+	}
 	es := []string{}
 
 	if e = self.CollectServers(c); e != nil {
@@ -53,6 +61,34 @@ func (self *PgBouncer) Collect(c* MetricsCollection) (e error) {
 
 func (self *PgBouncer) Keys() []string {
 	return []string {
+		"connections.Total",
+		"memory.Free",
+		"memory.MemTotal",
+		"memory.Size",
+		"memory.Used",
+		"pools.ClientsActive",
+		"pools.ClientsWaiting",
+		"pools.MaxWait",
+		"pools.ServersActive",
+		"pools.ServersIdle",
+		"pools.ServersLogin",
+		"pools.ServersTested",
+		"pools.ServersUsed",
+		"sockets.PktAvail",
+		"sockets.PktPos",
+		"sockets.PktRemain",
+		"sockets.RecvPos",
+		"sockets.SendAvail",
+		"sockets.SendPos",
+		"sockets.SendRemain",
+		"stats.AvgQuery",
+		"stats.AvgRecv",
+		"stats.AvgReq",
+		"stats.AvgSent",
+		"stats.TotalQueryTime",
+		"stats.TotalReceived",
+		"stats.TotalRequests",
+		"stats.TotalSent",
 	}
 }
 

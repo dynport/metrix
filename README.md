@@ -386,6 +386,40 @@ Used tags for some metrics are `table`, `index`, `database`, `pid`, `state` and 
     postgres.indexes.IdxTupRead
     postgres.indexes.IdxTupFetch
 
+### PgBouncer
+
+Used tags are `database`, `state`, `address`, `port`, `local_address`, `local_port` and `type`.
+
+	$ ./bin/metrix --pgbouncer=127.0.0.1:6432 --keys
+	pgbouncer.connections.Total
+	pgbouncer.memory.Free
+	pgbouncer.memory.MemTotal
+	pgbouncer.memory.Size
+	pgbouncer.memory.Used
+	pgbouncer.pools.ClientsActive
+	pgbouncer.pools.ClientsWaiting
+	pgbouncer.pools.MaxWait
+	pgbouncer.pools.ServersActive
+	pgbouncer.pools.ServersIdle
+	pgbouncer.pools.ServersLogin
+	pgbouncer.pools.ServersTested
+	pgbouncer.pools.ServersUsed
+	pgbouncer.sockets.PktAvail
+	pgbouncer.sockets.PktPos
+	pgbouncer.sockets.PktRemain
+	pgbouncer.sockets.RecvPos
+	pgbouncer.sockets.SendAvail
+	pgbouncer.sockets.SendPos
+	pgbouncer.sockets.SendRemain
+	pgbouncer.stats.AvgQuery
+	pgbouncer.stats.AvgRecv
+	pgbouncer.stats.AvgReq
+	pgbouncer.stats.AvgSent
+	pgbouncer.stats.TotalQueryTime
+	pgbouncer.stats.TotalReceived
+	pgbouncer.stats.TotalRequests
+	pgbouncer.stats.TotalSent
+
 ## Help
     USAGE: ./bin/metrix
       --help           	Print this usage page                                               

@@ -42,6 +42,8 @@ func init() {
 func main() {
 	if os.Getenv("DEBUG") == "true" {
 		logger.LogLevel = DEBUG
+	} else {
+		logger.LogLevel = WARN
 	}
 
 	if e := parser.ProcessAll(os.Args[1:]); e != nil {
