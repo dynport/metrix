@@ -1,7 +1,7 @@
 package main
 
-func NewTestMetrixd() (m* Metrixd) {
-	return &Metrixd{}
+func NewTestMetrix() (m* Metrix) {
+	return &Metrix{}
 }
 
 func (t *testSuite) TestRiakStatus() {

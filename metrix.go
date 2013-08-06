@@ -5,14 +5,14 @@ import (
 	"os"
 )
 
-type Metrixd struct {
+type Metrix struct {
 }
 
-func (m* Metrixd) ProcRoot() (s string) {
+func (m* Metrix) ProcRoot() (s string) {
 	return os.Getenv("PROC_ROOT")
 }
 
-func (m* Metrixd) ReadProcFile(path string) (r string) {
+func (m* Metrix) ReadProcFile(path string) (r string) {
 	if b, e := ioutil.ReadFile(m.ProcRoot() + "/proc/" + path); e == nil {
 		r = string(b)
 	}
