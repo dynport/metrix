@@ -6,6 +6,12 @@ import (
 	"errors"
 )
 
+const NGINX = "nginx"
+
+func init() {
+	parser.Add(NGINX, "http://127.0.0.1:8080", "Collect nginx metrics")
+}
+
 type Nginx struct {
 	Address string
 	Raw []byte

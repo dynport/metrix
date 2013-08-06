@@ -8,6 +8,12 @@ import (
 	"strconv"
 )
 
+const PROCESSES = "processes"
+
+func init() {
+	parser.Add(PROCESSES, "true", "Collect metrics for processes")
+}
+
 var procStatsMapping = map[int]string {
 	13: "Utime",
 	14: "Stime",

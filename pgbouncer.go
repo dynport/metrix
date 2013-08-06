@@ -8,6 +8,12 @@ import (
 	"errors"
 )
 
+const PGBOUNCER = "pgbouncer"
+
+func init() {
+	parser.Add(PGBOUNCER, "127.0.0.1:6432", "Collect pgbouncer metrics")
+}
+
 type PgBouncer struct {
 	Address string
 	Port    int

@@ -5,6 +5,12 @@ import (
 	"strconv"
 )
 
+const MEMORY = "memory"
+
+func init() {
+	parser.Add(MEMORY, "true", "Collect memory metrics")
+}
+
 type Memory struct {
 }
 

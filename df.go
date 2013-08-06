@@ -20,7 +20,12 @@ func (self *Df) Prefix() string {
 const (
 	SPACE = "space"
 	INODE = "inode"
+	DF = "df"
 )
+
+func init() {
+	parser.Add(DF, "true", "Collect disk free space metrics")
+}
 
 var dfFlgaMapping = map[string]string {
 	SPACE: "-k",

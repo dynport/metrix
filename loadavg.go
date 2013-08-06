@@ -5,6 +5,12 @@ import (
 	"strconv"
 )
 
+const LOADAVG = "loadavg"
+
+func init() {
+	parser.Add(LOADAVG, "true", "Collect loadvg metrics")
+}
+
 type LoadAvg struct {
 }
 

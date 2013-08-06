@@ -4,6 +4,12 @@ import (
 	"encoding/json"
 )
 
+const ELASTICSEARCH = "elasticsearch"
+
+func init() {
+	parser.Add(ELASTICSEARCH, "http://127.0.0.1:9200/_status", "Collect ElasticSearch metrics")
+}
+
 type ElasticSearch struct {
 	Url string
 	RawStatus []byte

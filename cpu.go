@@ -26,6 +26,12 @@ var cpuLineMapping = map[int]string {
 	7: "SoftIRQ",
 }
 
+const CPU = "cpu"
+
+func init() {
+	parser.Add(CPU, "true", "Collect cpu metrics")
+}
+
 type Cpu struct {
 }
 

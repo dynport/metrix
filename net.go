@@ -7,6 +7,12 @@ import (
 	"regexp"
 )
 
+const NET = "net"
+
+func init() {
+	parser.Add(NET, "true", "Collect network metrics")
+}
+
 var mapStatMapping = map[string]string {
 	"total packets received": "ip.TotalPacketsReceived",
 	"forwarded": "ip.Forwarded",

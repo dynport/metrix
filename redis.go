@@ -6,6 +6,12 @@ import (
 	"strings"
 )
 
+const REDIS = "redis"
+
+func init() {
+	parser.Add(REDIS, "127.0.0.1:6379", "Collect redis metrics")
+}
+
 type Redis struct {
 	Address string
 	Raw []byte

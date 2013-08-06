@@ -28,48 +28,22 @@ const (
 
 	OPENTSDB = "opentsdb"
 	GRAPHITE = "graphite"
-
-	POSTGRES = "postgres"
-	REDIS = "redis"
-	PGBOUNCER = "pgbouncer"
-	RIAK = "riak"
-	ELASTICSEARCH = "elasticsearch"
-	NGINX = "nginx"
-
-	NET = "net"
-	DF = "df"
-	DISK = "disk"
-	CPU = "cpu"
-	PROCESSES = "processes"
-	LOADAVG = "loadavg"
-	MEMORY = "memory"
 )
 
-func main() {
-	if os.Getenv("DEBUG") == "true" {
-		logger.LogLevel = DEBUG
-	}
-	parser := NewOptParser()
+
+func init() {
 	parser.Add(HELP, "true", "Print this usage page")
 	parser.Add(KEYS, "true", "Only list all known keys")
 	parser.AddKey(OPENTSDB, "Report metrics to OpenTSDB host.\nEXAMPLE: opentsdb.host:4242")
 	parser.AddKey(GRAPHITE, "Report metrics to Graphite host.\nEXAMPLE: graphite.host:2003")
 	parser.AddKey(HOSTNAME, "Hostname to be used for tagging. If blank the local hostname is used")
+}
 
-	parser.Add(NET, "true", "Collect network metrics")
-	parser.Add(DF, "true", "Collect disk free space metrics")
-	parser.Add(DISK, "true", "Collect disk usage metrics")
-	parser.Add(CPU, "true", "Collect cpu metrics")
-	parser.Add(PROCESSES, "true", "Collect metrics for processes")
-	parser.Add(LOADAVG, "true", "Collect loadvg metrics")
-	parser.Add(MEMORY, "true", "Collect memory metrics")
+func main() {
+	if os.Getenv("DEBUG") == "true" {
+		logger.LogLevel = DEBUG
+	}
 
-	parser.Add(NGINX, "http://127.0.0.1:8080", "Collect nginx metrics")
-	parser.Add(REDIS, "127.0.0.1:6379", "Collect redis metrics")
-	parser.Add(ELASTICSEARCH, "http://127.0.0.1:9200/_status", "Collect ElasticSearch metrics")
-	parser.Add(RIAK, "http://127.0.0.1:8098/stats", "Collect riak metrics")
-	parser.Add(PGBOUNCER, "127.0.0.1:6432", "Collect pgbouncer metrics")
-	parser.AddKey(POSTGRES, "Collect postgres metrics.\nEXAMPLE: psql://user:pwd@host/db")
 	if e := parser.ProcessAll(os.Args[1:]); e != nil {
 		logger.Error(e.Error())
 		os.Exit(1)

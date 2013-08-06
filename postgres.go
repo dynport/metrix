@@ -11,6 +11,11 @@ import (
 	"net/url"
 )
 
+const POSTGRES = "postgres"
+
+func init() {
+	parser.AddKey(POSTGRES, "Collect postgres metrics.\nEXAMPLE: psql://user:pwd@host/db")
+}
 type PostgresURL struct {
 	Host, User, Password, Database string
 	Port int

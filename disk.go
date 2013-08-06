@@ -6,6 +6,12 @@ import (
 	"strconv"
 )
 
+const DISK = "disk"
+
+func init() {
+	parser.Add(DISK, "true", "Collect disk usage metrics")
+}
+
 var diskStatFields = map[int]string {
 	0: "ReadsCompleted",
 	1: "ReadsMerged",

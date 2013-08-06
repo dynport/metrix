@@ -1,7 +1,9 @@
 GIT_COMMIT = $(shell git rev-parse --short HEAD)
 GIT_STATUS = $(shell test -n "`git status --porcelain`" && echo "+CHANGES")
 BASE_PACKAGES = constants.go util.go output.go metric.go metrix.go metrics_collection.go metric_handler.go logger.go optparse.go table.go
-COLLECTORS = loadavg.go memory.go cpu.go disk.go processes.go net.go df.go riak.go elasticsearch.go redis.go postgres.go pgbouncer.go nginx.go
+BASE_COLLECTORS = loadavg.go memory.go cpu.go disk.go processes.go net.go df.go 
+EXTRA_COLLECTORS = riak.go elasticsearch.go redis.go postgres.go pgbouncer.go nginx.go
+COLLECTORS = $(BASE_COLLECTORS) $(EXTRA_COLLECTORS)
 BUILD_CMD = go build -a -ldflags "-X main.GITCOMMIT $(GIT_COMMIT)$(GIT_STATUS)"
 
 default: all

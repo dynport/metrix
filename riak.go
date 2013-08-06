@@ -4,6 +4,12 @@ import (
 	"encoding/json"
 )
 
+const RIAK = "riak"
+
+func init() {
+	parser.Add(RIAK, "http://127.0.0.1:8098/stats", "Collect riak metrics")
+}
+
 type RiakStatus struct {
 	VNodeGets int64 `json:"vnode_gets"`
 	VNodeGetsTotal int64 `json:"vnode_gets_total"`
