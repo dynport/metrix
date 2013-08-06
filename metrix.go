@@ -6,6 +6,11 @@ import (
 )
 
 type Metrix struct {
+	Collectors map[string]*MetricCollector
+}
+
+func (self *Metrix) AddCollector(key string, col *MetricCollector) {
+	self.Collectors[key] = col
 }
 
 func (m* Metrix) ProcRoot() (s string) {
