@@ -134,7 +134,7 @@ All metrics are tagged with `pid`, parent pid (`ppid`), `name` and raw `comm` va
     processes.GuestTime
     processes.CguestTime
 
-## Disk
+### Disk
 All metrics are tagged with `name` of the disk when writing to OpenTSDB.
 
     $ metrix --disk --keys
@@ -150,7 +150,7 @@ All metrics are tagged with `name` of the disk when writing to OpenTSDB.
     disk.MillisecondsIO
     disk.WeightedMillisecondsIO
 
-## Redis
+### Redis
 
 All redis metrics are tagged with the `pid` and the `port` on which redis is running. For the `redis.db` db id is tagged with `db`.
 
