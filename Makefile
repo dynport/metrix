@@ -8,7 +8,11 @@ BUILD_CMD = go build -a -ldflags "-X main.GITCOMMIT $(GIT_COMMIT)$(GIT_STATUS)"
 
 default: all
 
-wip: test
+wip: ctags test
+
+ctags:
+	go get github.com/jstemmer/gotags
+	gotags `find . -name "*.go" | grep -v '/test/' | xargs` 2> /dev/null > tags.tmp && mv tags.tmp tags
 
 install_dependencies:
 	go get github.com/remogatto/prettytest
