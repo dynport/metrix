@@ -1,24 +1,24 @@
 package main
 
-func NewTestMetrix() (m* Metrix) {
-	return &Metrix{}
-}
+import (
+	"testing"
+	"github.com/stretchr/testify/assert"
+)
 
-func (t *testSuite) TestRiakStatus() {
+func TestRiakStatus(t *testing.T) {
 	m := &Riak{}
 	raw := readFile("fixtures/riak.json")
 	status, e := m.ParseRiakStatus(raw)
 	if e != nil {
-		t.T.Fatal(e.Error())
+		t.Fatal(e.Error())
 	}
-	t.Equal(status.VNodeGets, int64(241))
-	t.Equal(status.NodePutFsmActive, int64(0))
-	t.Equal(status.CpuAvg1, int64(274))
+	assert.Equal(t, status.VNodeGets, int64(241))
+	assert.Equal(t, status.NodePutFsmActive, int64(0))
+	assert.Equal(t, status.CpuAvg1, int64(274))
 
-	t.Equal(len(status.ConnectedNodes), 4)
-	t.Equal(status.ConnectedNodes[0], "riak@192.168.0.16")
+	assert.Equal(t, len(status.ConnectedNodes), 4)
+	assert.Equal(t, status.ConnectedNodes[0], "riak@192.168.0.16")
 
-	t.Equal(len(status.RingMembers), 5)
-	t.Equal(status.RingMembers[0], "riak@192.168.0.16")
+	assert.Equal(t, len(status.RingMembers), 5)
+	assert.Equal(t, status.RingMembers[0], "riak@192.168.0.16")
 }
-

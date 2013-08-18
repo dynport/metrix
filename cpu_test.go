@@ -1,13 +1,18 @@
 package main
 
-func (t *testSuite) TestCpu() {
+import (
+	"testing"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestCpu(t *testing.T) {
 	mh := &MetricHandler{}
 	stats, _ := mh.Collect(&Cpu{})
-	t.Equal(len(stats), 19)
-	t.Equal(stats[0].Key, "cpu.User")
-	t.Equal(stats[0].Tags["total"], "true")
-	t.Equal(stats[0].Value, int64(3700))
+	assert.Equal(t, len(stats), 19)
+	assert.Equal(t, stats[0].Key, "cpu.User")
+	assert.Equal(t, stats[0].Tags["total"], "true")
+	assert.Equal(t, stats[0].Value, 3700)
 
-	t.Equal(stats[14].Key, "cpu.Ctxt")
-	t.Equal(stats[14].Value, int64(957584))
+	assert.Equal(t, stats[14].Key, "cpu.Ctxt")
+	assert.Equal(t, stats[14].Value, 957584)
 }

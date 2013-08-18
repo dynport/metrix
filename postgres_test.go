@@ -1,14 +1,19 @@
 package main
 
-func (t *testSuite) TestParsePostgresUrl() {
+import (
+	"testing"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestParsePostgresUrl(t *testing.T) {
 	raw := "psql://ff:ffpwd@127.0.0.1:1234/ff_test"
 	u := ParsePostgresUrl(raw)
-	t.Equal(u.Host, "127.0.0.1")
-	t.Equal(u.User, "ff")
-	t.Equal(u.Password, "ffpwd")
-	t.Equal(u.Database, "ff_test")
-	t.Equal(u.Port, 1234)
+	assert.Equal(t, u.Host, "127.0.0.1")
+	assert.Equal(t, u.User, "ff")
+	assert.Equal(t, u.Password, "ffpwd")
+	assert.Equal(t, u.Database, "ff_test")
+	assert.Equal(t, u.Port, 1234)
 
 	s, _ := u.ConnectString()
-	t.Equal(s, "host=127.0.0.1 dbname=ff_test user=ff password=ffpwd port=1234 sslmode=disable")
+	assert.Equal(t, s, "host=127.0.0.1 dbname=ff_test user=ff password=ffpwd port=1234 sslmode=disable")
 }

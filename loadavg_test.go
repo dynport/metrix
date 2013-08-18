@@ -1,11 +1,15 @@
 package main
 
-func (t *testSuite) TestLoadAvg() {
+import (
+	"testing"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestLoadAvg(t *testing.T) {
 	mh := &MetricHandler{}
 	stats, _ := mh.Collect(&LoadAvg{})
-	t.Equal(len(stats), 3)
-	t.Equal(stats[0].Value, int64(3))
-	t.Equal(stats[1].Value, int64(7))
-	t.Equal(stats[2].Value, int64(8))
+	assert.Equal(t, len(stats), 3)
+	assert.Equal(t, stats[0].Value, 3)
+	assert.Equal(t, stats[1].Value, 7)
+	assert.Equal(t, stats[2].Value, 8)
 }
-

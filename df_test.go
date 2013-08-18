@@ -1,6 +1,11 @@
 package main
 
-func (t *testSuite) TestDf() {
+import (
+	"testing"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestDf(t *testing.T) {
 	mh := new(MetricHandler)
 	col := &Df{
 		RawSpace: readFile("fixtures/df.txt"),
@@ -8,20 +13,20 @@ func (t *testSuite) TestDf() {
 	}
 	stats, e := mh.Collect(col)
 	if e != nil {
-		t.T.Log("ERROR", e.Error())
+		t.Log("ERROR", e.Error())
 		t.Failed()
 		return
 	}
 
-	t.Equal(len(stats), 8)
+	assert.Equal(t, len(stats), 8)
 
-	t.Equal(stats[0].Key, "df.space.Total")
-	t.Equal(stats[0].Value, int64(20511356))
-	t.Equal(stats[0].Tags["file_system"], "/dev/sda")
-	t.Equal(stats[0].Tags["mounted_on"], "/")
+	assert.Equal(t, stats[0].Key, "df.space.Total")
+	assert.Equal(t, stats[0].Value, int64(20511356))
+	assert.Equal(t, stats[0].Tags["file_system"], "/dev/sda")
+	assert.Equal(t, stats[0].Tags["mounted_on"], "/")
 
-	t.Equal(stats[4].Key, "df.inode.Total")
-	t.Equal(stats[4].Value, int64(1310720))
-	t.Equal(stats[4].Tags["file_system"], "/dev/sda")
-	t.Equal(stats[4].Tags["mounted_on"], "/")
+	assert.Equal(t, stats[4].Key, "df.inode.Total")
+	assert.Equal(t, stats[4].Value, int64(1310720))
+	assert.Equal(t, stats[4].Tags["file_system"], "/dev/sda")
+	assert.Equal(t, stats[4].Tags["mounted_on"], "/")
 }

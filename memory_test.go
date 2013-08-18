@@ -1,12 +1,17 @@
 package main
 
-func (t *testSuite) TestMemory() {
+import (
+	"testing"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestMemory(t *testing.T) {
 	m := &Memory{}
 	mh := &MetricHandler{}
 	stats, _ := mh.Collect(m)
 
-	t.True(len(stats) > 10)
-	t.Equal(len(stats), 42)
-	t.Equal(stats[0].Key, "memory.MemTotal")
-	t.Equal(stats[0].Value, int64(502976))
+	assert.True(t, len(stats) > 10)
+	assert.Equal(t, len(stats), 42)
+	assert.Equal(t, stats[0].Key, "memory.MemTotal")
+	assert.Equal(t, stats[0].Value, 502976)
 }

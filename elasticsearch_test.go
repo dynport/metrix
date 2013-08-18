@@ -1,6 +1,11 @@
 package main
 
-func (t *testSuite) TestParseElasticSearch() {
+import (
+	"testing"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestParseElasticSearch(t *testing.T) {
 	mh := &MetricHandler{}
 	es := &ElasticSearch{ RawStatus: readFile("fixtures/elasticsearch_status.json") }
 
@@ -14,9 +19,9 @@ func (t *testSuite) TestParseElasticSearch() {
 		}
 		mapped[k] = m
 	}
-	t.Equal(mapped["elasticsearch.shards.Total"].Value, int64(20))
-	t.Equal(mapped["elasticsearch.shards.Successful"].Value, int64(10))
-	t.Equal(mapped["index.elasticsearch.indices.index.SizeInBytes"].Value, int64(2161))
-	t.Equal(mapped["index.elasticsearch.indices.merges.TotalDocs"].Value, int64(1))
-	t.True(len(mapped) > 5)
+	assert.Equal(t, mapped["elasticsearch.shards.Total"].Value, int64(20))
+	assert.Equal(t, mapped["elasticsearch.shards.Successful"].Value, int64(10))
+	assert.Equal(t, mapped["index.elasticsearch.indices.index.SizeInBytes"].Value, int64(2161))
+	assert.Equal(t, mapped["index.elasticsearch.indices.merges.TotalDocs"].Value, int64(1))
+	assert.True(t, len(mapped) > 5)
 }

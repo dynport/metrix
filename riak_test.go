@@ -1,12 +1,17 @@
 package main
 
-func (t *testSuite) TestRiakMetrics() {
+import (
+	"testing"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestRiakMetrics(t *testing.T) {
 	mh := &MetricHandler{}
 	col := &Riak{ Raw: readFile("fixtures/riak.json") }
 	metrics, _ := mh.Collect(col)
 
-	t.Equal(len(metrics), 126)
+	assert.Equal(t, len(metrics), 126)
 	m1 := metrics[0]
-	t.Equal(m1.Key, "riak.VNodeGets")
-	t.Equal(m1.Value, int64(241))
+	assert.Equal(t, m1.Key, "riak.VNodeGets")
+	assert.Equal(t, m1.Value, 241)
 }
