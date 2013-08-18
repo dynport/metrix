@@ -1,5 +1,7 @@
 # metrix
 
+[![Build Status](https://travis-ci.org/dynport/metrix.png?branch=master)](https://travis-ci.org/dynport/metrix)
+
 Metrics collector written in golang
 
 ## Requirements
