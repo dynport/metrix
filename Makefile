@@ -17,6 +17,10 @@ install_dependencies:
 clean:
 	rm -f bin/*
 
+release:
+	GOOS=linux  GOARCH=amd64 bash ./scripts/release.sh
+	GOOS=darwin GOARCH=amd64 bash ./scripts/release.sh
+
 test:
 	go test -v
 
