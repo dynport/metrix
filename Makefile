@@ -1,9 +1,9 @@
 GIT_COMMIT = $(shell git rev-parse --short HEAD)
 GIT_STATUS = $(shell test -n "`git status --porcelain`" && echo "+CHANGES")
-BUILD_CMD = go build -a -ldflags "-X main.GITCOMMIT $(GIT_COMMIT)$(GIT_STATUS)"
+BUILD_CMD = go build -ldflags "-X main.GITCOMMIT $(GIT_COMMIT)$(GIT_STATUS)"
 
 default: clean test all
-	./bin/metrix --cpu --memory --net --df --disk --processes
+	./bin/metrix --cpu --memory --net --df --disk --processes --files
 
 wip: ctags test
 
@@ -22,7 +22,7 @@ test:
 
 jenkins: clean install_dependencies test all
 	PROC_ROOT=./fixtures ./bin/metrix --loadavg --disk --memory --processes --cpu
-	./bin/metrix --loadavg --disk --memory --processes --cpu --keys
+	./bin/metrix --loadavg --disk --memory --processes --cpu --keys --files
 
 all:
 	$(BUILD_CMD) -o bin/metrix

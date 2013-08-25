@@ -102,6 +102,11 @@ All metrics are tagged with `file_system` and `mounted_on` when writing to OpenT
     net.ip.InOctets
     net.ip.OutOctets
 
+### Open Files (fetched with lsof)
+
+     $ ./bin/metrix --files --keys
+     files.Open
+
 ### Process
 
 All metrics are tagged with `pid`, parent pid (`ppid`), `name` and raw `comm` value of the process when writing to OpenTSDB.

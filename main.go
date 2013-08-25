@@ -76,6 +76,7 @@ func main() {
 		PGBOUNCER: &PgBouncer{ Address: parser.Get(PGBOUNCER) },
 		POSTGRES: &PostgreSQLStats{ Uri: parser.Get(POSTGRES) },
 		NGINX: &Nginx{ Address: parser.Get(NGINX) },
+		FILES: &Files{},
 	}
 
 	mh := &MetricHandler{}
