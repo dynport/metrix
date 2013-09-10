@@ -9,7 +9,7 @@ type Config struct {
 	OpenTSDBUrl string `json:"opentsdb_url"`
 }
 
-var OUTPUTS = []string{ "graphite", "opentsdb" }
+var OUTPUTS = []string{"graphite", "opentsdb"}
 
 func processCollector(mh *MetricHandler, output *OutputHandler, c MetricCollector) (e error) {
 	all, e := mh.Collect(c)
@@ -29,7 +29,6 @@ const (
 	OPENTSDB = "opentsdb"
 	GRAPHITE = "graphite"
 )
-
 
 func init() {
 	parser.Add(HELP, "true", "Print this usage page")
@@ -55,28 +54,29 @@ func main() {
 	if a := parser.Get(OPENTSDB); a != "" {
 		output.OpenTSDBAddress = a
 	}
-	if a:= parser.Get(GRAPHITE); a != "" {
+	if a := parser.Get(GRAPHITE); a != "" {
 		output.GraphiteAddress = a
 	}
 	if a := parser.Get(HOSTNAME); a != "" {
 		output.Hostname = a
 	}
 
-	collectors := map[string]MetricCollector {
+	collectors := map[string]MetricCollector{
 		ELASTICSEARCH: &ElasticSearch{Url: parser.Get(ELASTICSEARCH)},
-		REDIS: &Redis{Address: parser.Get(REDIS)},
-		CPU: &Cpu{},
-		LOADAVG: &LoadAvg{},
-		MEMORY: &Memory{},
-		DISK: &Disk{},
-		DF: &Df{},
-		NET: &Net{},
-		PROCESSES: &Processes{},
-		RIAK: &Riak{ Address: parser.Get(RIAK) },
-		PGBOUNCER: &PgBouncer{ Address: parser.Get(PGBOUNCER) },
-		POSTGRES: &PostgreSQLStats{ Uri: parser.Get(POSTGRES) },
-		NGINX: &Nginx{ Address: parser.Get(NGINX) },
-		FILES: &Files{},
+		REDIS:         &Redis{Address: parser.Get(REDIS)},
+		CPU:           &Cpu{},
+		LOADAVG:       &LoadAvg{},
+		MEMORY:        &Memory{},
+		DISK:          &Disk{},
+		DF:            &Df{},
+		NET:           &Net{},
+		FREE:          &Free{},
+		PROCESSES:     &Processes{},
+		RIAK:          &Riak{Address: parser.Get(RIAK)},
+		PGBOUNCER:     &PgBouncer{Address: parser.Get(PGBOUNCER)},
+		POSTGRES:      &PostgreSQLStats{Uri: parser.Get(POSTGRES)},
+		NGINX:         &Nginx{Address: parser.Get(NGINX)},
+		FILES:         &Files{},
 	}
 
 	mh := &MetricHandler{}
