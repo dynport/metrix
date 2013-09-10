@@ -1,14 +1,14 @@
 package main
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestParseNginx(t *testing.T) {
 	logger.LogLevel = INFO
 	mh := &MetricHandler{}
-	nginx := &Nginx{ Raw: readFile("fixtures/nginx.status") }
+	nginx := &Nginx{Raw: readFile("fixtures/nginx.status")}
 
 	all, _ := mh.Collect(nginx)
 	assert.Equal(t, len(all), 7)

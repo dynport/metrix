@@ -1,19 +1,19 @@
 package main
 
 import (
-	"net"
 	"fmt"
-	"time"
+	"net"
 	"os"
+	"time"
 )
 
 type OutputHandler struct {
 	OpenTSDBAddress string
 	GraphiteAddress string
-	Hostname string
+	Hostname        string
 }
 
-func (o* OutputHandler) WriteMetrics(all[]*Metric) (e error) {
+func (o *OutputHandler) WriteMetrics(all []*Metric) (e error) {
 	if o.Hostname == "" {
 		hn, e := os.Hostname()
 		if e != nil {
@@ -40,21 +40,21 @@ func (o* OutputHandler) WriteMetrics(all[]*Metric) (e error) {
 
 func SendMetricsToGraphite(address string, metrics []*Metric, hostname string) (e error) {
 	return SendMetricsWith(address, metrics, hostname, func(started time.Time, metric *Metric) string {
-			return metric.Graphite(started, hostname)
-		},
+		return metric.Graphite(started, hostname)
+	},
 	)
 }
 
 func SendMetricsToOpenTSDB(address string, metrics []*Metric, hostname string) (e error) {
 	return SendMetricsWith(address, metrics, hostname, func(started time.Time, metric *Metric) string {
-			return metric.OpenTSDB(started, hostname)
-		},
+		return metric.OpenTSDB(started, hostname)
+	},
 	)
 }
 
 func SendMetricsWith(address string, metrics []*Metric, hostname string, serializer func(time.Time, *Metric) string) (e error) {
 	started := time.Now()
-	con, e := net.DialTimeout("tcp", address, 1 * time.Second)
+	con, e := net.DialTimeout("tcp", address, 1*time.Second)
 	if e != nil {
 		return
 	}

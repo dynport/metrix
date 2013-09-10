@@ -3,9 +3,9 @@ package main
 import (
 	"errors"
 	"os/exec"
-	"strings"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 type Df struct {
@@ -20,21 +20,20 @@ func (self *Df) Prefix() string {
 const (
 	SPACE = "space"
 	INODE = "inode"
-	DF = "df"
+	DF    = "df"
 )
 
 func init() {
 	parser.Add(DF, "true", "Collect disk free space metrics")
 }
 
-var dfFlgaMapping = map[string]string {
+var dfFlgaMapping = map[string]string{
 	SPACE: "-k",
 	INODE: "-i",
 }
 
-
 func (self *Df) Keys() []string {
-	return []string {
+	return []string{
 		SPACE + ".Total",
 		SPACE + ".Used",
 		SPACE + ".Available",
@@ -46,7 +45,7 @@ func (self *Df) Keys() []string {
 	}
 }
 
-func CollectDf(t string, raw []byte, c* MetricsCollection) (e error) {
+func CollectDf(t string, raw []byte, c *MetricsCollection) (e error) {
 	if len(raw) == 0 {
 		if flag, ok := dfFlgaMapping[t]; ok {
 			raw, e = ReadDf(flag)
@@ -62,28 +61,28 @@ func CollectDf(t string, raw []byte, c* MetricsCollection) (e error) {
 		}
 		chunks := re.Split(line, 6)
 		if len(chunks) == 6 {
-			tags := map[string]string {
+			tags := map[string]string{
 				"file_system": chunks[0],
-				"mounted_on": chunks[5],
+				"mounted_on":  chunks[5],
 			}
 			if v, e := strconv.ParseInt(chunks[1], 10, 64); e == nil {
-				c.AddWithTags(t + ".Total", v, tags)
+				c.AddWithTags(t+".Total", v, tags)
 			}
 			if v, e := strconv.ParseInt(chunks[2], 10, 64); e == nil {
-				c.AddWithTags(t + ".Used", v, tags)
+				c.AddWithTags(t+".Used", v, tags)
 			}
 			if v, e := strconv.ParseInt(chunks[3], 10, 64); e == nil {
-				c.AddWithTags(t + ".Available", v, tags)
+				c.AddWithTags(t+".Available", v, tags)
 			}
 			if v, e := strconv.ParseInt(strings.Replace(chunks[4], "%", "", 1), 10, 64); e == nil {
-				c.AddWithTags(t + ".Use", v, tags)
+				c.AddWithTags(t+".Use", v, tags)
 			}
 		}
 	}
 	return
 }
 
-func (self *Df) Collect(c* MetricsCollection) (e error) {
+func (self *Df) Collect(c *MetricsCollection) (e error) {
 	e = CollectDf(SPACE, self.RawSpace, c)
 	if e != nil {
 		return

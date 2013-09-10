@@ -14,12 +14,12 @@ func init() {
 type Memory struct {
 }
 
-func (m* Memory) Prefix() (string) {
+func (m *Memory) Prefix() string {
 	return "memory"
 }
 
-func (m* Memory) Keys() ([]string) {
-	return []string {
+func (m *Memory) Keys() []string {
+	return []string{
 		"MemTotal", "MemFree", "Buffers", "Cached", "SwapCached", "Active", "Inactive", "Active(anon)", "Inactive(anon)", "Active(file)",
 		"Inactive(file)", "Unevictable", "Mlocked", "SwapTotal", "SwapFree", "Dirty", "Writeback", "AnonPages", "Mapped", "Shmem",
 		"Slab", "SReclaimable", "SUnreclaim", "KernelStack", "PageTables", "NFS_Unstable", "Bounce", "WritebackTmp", "CommitLimit",
@@ -28,7 +28,7 @@ func (m* Memory) Keys() ([]string) {
 	}
 }
 
-func (memory* Memory) Collect(c *MetricsCollection) (e error) {
+func (memory *Memory) Collect(c *MetricsCollection) (e error) {
 	s := ReadProcFile("meminfo")
 	re := regexp.MustCompile("(.*?)\\:\\s+(\\d+)")
 	matches := re.FindAllStringSubmatch(s, -1)

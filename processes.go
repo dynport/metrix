@@ -1,11 +1,11 @@
 package main
 
 import (
+	"io/ioutil"
 	"path/filepath"
 	"regexp"
-	"io/ioutil"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 const PROCESSES = "processes"
@@ -14,7 +14,7 @@ func init() {
 	parser.Add(PROCESSES, "true", "Collect metrics for processes")
 }
 
-var procStatsMapping = map[int]string {
+var procStatsMapping = map[int]string{
 	13: "Utime",
 	14: "Stime",
 	15: "Cutime",
@@ -40,7 +40,7 @@ func (self *Processes) Prefix() string {
 }
 
 func (self *Processes) Keys() []string {
-	return []string {
+	return []string{
 		"Pid",
 		"Ppid",
 		"Pgrp",
@@ -77,7 +77,7 @@ func NormalizeProcessName(comm string) string {
 	return strings.Split(withoutBrackes, "/")[0]
 }
 
-func (self *Processes) Collect(c* MetricsCollection) (e error) {
+func (self *Processes) Collect(c *MetricsCollection) (e error) {
 	matches, e := filepath.Glob(ProcRoot() + "/proc/[0-9]*/stat")
 	if e != nil {
 		return
@@ -85,11 +85,11 @@ func (self *Processes) Collect(c* MetricsCollection) (e error) {
 	for _, path := range matches {
 		if data, e := ioutil.ReadFile(path); e == nil {
 			chunks := strings.Split(string(data), " ")
-			tags := map[string]string {
-				"pid": chunks[0],
-				"ppid": chunks[3],
-				"comm": chunks[1],
-				"name": NormalizeProcessName(chunks[1]),
+			tags := map[string]string{
+				"pid":   chunks[0],
+				"ppid":  chunks[3],
+				"comm":  chunks[1],
+				"name":  NormalizeProcessName(chunks[1]),
 				"state": chunks[2],
 			}
 			for idx, v := range chunks {

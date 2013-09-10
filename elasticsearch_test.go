@@ -1,17 +1,17 @@
 package main
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestParseElasticSearch(t *testing.T) {
 	mh := &MetricHandler{}
-	es := &ElasticSearch{ RawStatus: readFile("fixtures/elasticsearch_status.json") }
+	es := &ElasticSearch{RawStatus: readFile("fixtures/elasticsearch_status.json")}
 
 	all, _ := mh.Collect(es)
 
-	mapped := map[string]*Metric {}
+	mapped := map[string]*Metric{}
 	for _, m := range all {
 		k := m.Key
 		if name, ok := m.Tags["index_name"]; ok {

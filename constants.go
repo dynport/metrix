@@ -5,5 +5,5 @@ const VERSION = "0.1.2"
 
 var (
 	GITCOMMIT string
-	parser = NewOptParser()
+	parser    = NewOptParser()
 )

@@ -1,11 +1,11 @@
 package main
 
 import (
+	"errors"
 	"os/exec"
 	"strconv"
 	"strings"
 	"time"
-	"errors"
 )
 
 const PGBOUNCER = "pgbouncer"
@@ -19,7 +19,7 @@ type PgBouncer struct {
 	Port    int
 }
 
-func (self *PgBouncer) Collect(c* MetricsCollection) (e error) {
+func (self *PgBouncer) Collect(c *MetricsCollection) (e error) {
 	chunks := strings.Split(self.Address, ":")
 	if len(chunks) == 2 {
 		self.Address = chunks[0]
@@ -60,7 +60,7 @@ func (self *PgBouncer) Collect(c* MetricsCollection) (e error) {
 }
 
 func (self *PgBouncer) Keys() []string {
-	return []string {
+	return []string{
 		"connections.Total",
 		"memory.Free",
 		"memory.MemTotal",
@@ -107,7 +107,7 @@ type PgBouncerStat struct {
 	TotalRequests, TotalReceived, TotalSent, TotalQueryTime, AvgReq, AvgRecv, AvgSent, AvgQuery int64
 }
 
-func (self *PgBouncer) CollectStats(c* MetricsCollection) (e error) {
+func (self *PgBouncer) CollectStats(c *MetricsCollection) (e error) {
 	allStats, e := self.Stats()
 	if e == nil {
 		for _, s := range allStats {
@@ -131,8 +131,8 @@ type PgBouncerFD struct {
 }
 
 type PgBouncerSocket struct {
-	Type, User, Database, State, Address, LocalAddress                                   string
-	ConnectTime, RequestTime                                                             time.Time
+	Type, User, Database, State, Address, LocalAddress                                    string
+	ConnectTime, RequestTime                                                              time.Time
 	Port, LocalPort, RecvPos, PktPos, PktRemain, SendPos, SendRemain, PktAvail, SendAvail int64
 }
 
@@ -141,15 +141,15 @@ type PgBouncerMemory struct {
 	Size, Used, Free, MemTotal int64
 }
 
-func (self *PgBouncer) CollectClients(c* MetricsCollection) (e error) {
+func (self *PgBouncer) CollectClients(c *MetricsCollection) (e error) {
 	return self.CollectConnections("clients", c)
 }
 
-func (self *PgBouncer) CollectServers(c* MetricsCollection) (e error) {
+func (self *PgBouncer) CollectServers(c *MetricsCollection) (e error) {
 	return self.CollectConnections("servers", c)
 }
 
-func (self *PgBouncer) CollectConnections(t string, c* MetricsCollection) (e error) {
+func (self *PgBouncer) CollectConnections(t string, c *MetricsCollection) (e error) {
 	connections, e := self.Connections(t)
 	if e != nil {
 		return
@@ -213,7 +213,7 @@ type PgBouncerPool struct {
 	ClientsActive, ClientsWaiting, ServersActive, ServersIdle, ServersUsed, ServersTested, ServersLogin, MaxWait int64
 }
 
-func (self *PgBouncer) CollectPools(c* MetricsCollection) (e error) {
+func (self *PgBouncer) CollectPools(c *MetricsCollection) (e error) {
 	pools, e := self.Pools()
 	if e != nil {
 		return
@@ -327,20 +327,20 @@ func (b *PgBouncer) GenericSockets(s string) (ret []*PgBouncerSocket, e error) {
 	return
 }
 
-func (self *PgBouncer) CollectSockets(c* MetricsCollection) (e error) {
+func (self *PgBouncer) CollectSockets(c *MetricsCollection) (e error) {
 	sockets, e := self.Sockets()
 	if e != nil {
 		return
 	}
 	for _, socket := range sockets {
-		tags := map[string]string {
-			"type": socket.Type,
-			"database": socket.Database,
-			"state": socket.State,
-			"address": socket.Address,
-			"port": strconv.FormatInt(socket.Port, 10),
+		tags := map[string]string{
+			"type":          socket.Type,
+			"database":      socket.Database,
+			"state":         socket.State,
+			"address":       socket.Address,
+			"port":          strconv.FormatInt(socket.Port, 10),
 			"local_address": socket.LocalAddress,
-			"local_port": strconv.FormatInt(socket.LocalPort, 10),
+			"local_port":    strconv.FormatInt(socket.LocalPort, 10),
 		}
 		c.AddWithTags("sockets.RecvPos", socket.RecvPos, tags)
 		c.AddWithTags("sockets.PktPos", socket.PktPos, tags)
@@ -368,11 +368,11 @@ func (b *PgBouncer) Memory() (ret []*PgBouncerMemory, e error) {
 	return
 }
 
-func (b *PgBouncer) CollectMemory(c* MetricsCollection) (e error) {
+func (b *PgBouncer) CollectMemory(c *MetricsCollection) (e error) {
 	memories, e := b.Memory()
 	if e == nil {
 		for _, m := range memories {
-			tags := map[string]string { "name": m.Name }
+			tags := map[string]string{"name": m.Name}
 			c.AddWithTags("memory.Size", m.Size, tags)
 			c.AddWithTags("memory.Used", m.Used, tags)
 			c.AddWithTags("memory.Free", m.Free, tags)

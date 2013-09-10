@@ -2,8 +2,8 @@ package main
 
 import (
 	"regexp"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 const DISK = "disk"
@@ -12,25 +12,25 @@ func init() {
 	parser.Add(DISK, "true", "Collect disk usage metrics")
 }
 
-var diskStatFields = map[int]string {
-	0: "ReadsCompleted",
-	1: "ReadsMerged",
-	2: "SectorsRead",
-	3: "MillisecondsRead",
-	4: "WritesCompleted",
-	5: "WritesMerged",
-	6: "SectorsWritten",
-	7: "MillisecondsWritten",
-	8: "IosInProgress",
-	9: "MillisecondsIO",
+var diskStatFields = map[int]string{
+	0:  "ReadsCompleted",
+	1:  "ReadsMerged",
+	2:  "SectorsRead",
+	3:  "MillisecondsRead",
+	4:  "WritesCompleted",
+	5:  "WritesMerged",
+	6:  "SectorsWritten",
+	7:  "MillisecondsWritten",
+	8:  "IosInProgress",
+	9:  "MillisecondsIO",
 	10: "WeightedMillisecondsIO",
 }
 
 type Disk struct {
 }
 
-func (self *Disk) Keys() ([]string) {
-	return []string {
+func (self *Disk) Keys() []string {
+	return []string{
 		"ReadsCompleted",
 		"ReadsMerged",
 		"SectorsRead",
@@ -49,13 +49,13 @@ func (self *Disk) Prefix() string {
 	return "disk"
 }
 
-func (self *Disk) Collect(c* MetricsCollection) (e error) {
+func (self *Disk) Collect(c *MetricsCollection) (e error) {
 	str := ReadProcFile("diskstats")
 	re := regexp.MustCompile("\\d+\\s+\\d+ (\\w+) (\\d+.*)")
 	matches := re.FindAllStringSubmatch(str, -1)
 	for _, m1 := range matches {
 		name := m1[1]
-		tags := map[string]string { "name": name }
+		tags := map[string]string{"name": name}
 		if strings.HasPrefix(name, "ram") || strings.HasPrefix(name, "loop") || strings.HasPrefix(name, "sr") {
 			continue
 		}

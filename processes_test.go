@@ -1,8 +1,8 @@
 package main
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestProcesses(t *testing.T) {
@@ -23,4 +23,3 @@ func TestNormlizeProcessName(t *testing.T) {
 	assert.Equal(t, NormalizeProcessName("(int)"), "int")
 	assert.Equal(t, NormalizeProcessName("(kworker/2:1H)"), "kworker")
 }
-

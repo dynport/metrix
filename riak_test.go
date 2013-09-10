@@ -1,13 +1,13 @@
 package main
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestRiakMetrics(t *testing.T) {
 	mh := &MetricHandler{}
-	col := &Riak{ Raw: readFile("fixtures/riak.json") }
+	col := &Riak{Raw: readFile("fixtures/riak.json")}
 	metrics, _ := mh.Collect(col)
 
 	assert.Equal(t, len(metrics), 126)

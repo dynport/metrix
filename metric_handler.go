@@ -9,7 +9,7 @@ type MetricCollector interface {
 	Collect(*MetricsCollection) error
 }
 
-func (h* MetricHandler) Collect(c MetricCollector) (all []*Metric, e error) {
+func (h *MetricHandler) Collect(c MetricCollector) (all []*Metric, e error) {
 	mc := &MetricsCollection{Prefix: c.Prefix()}
 	mc.AddSingularMappings(c.Keys())
 	if e = c.Collect(mc); e != nil {
@@ -19,9 +19,9 @@ func (h* MetricHandler) Collect(c MetricCollector) (all []*Metric, e error) {
 	return
 }
 
-func (h* MetricHandler) Keys(c MetricCollector) (keys []string) {
+func (h *MetricHandler) Keys(c MetricCollector) (keys []string) {
 	for _, m := range c.Keys() {
-		keys = append(keys, c.Prefix() + "." + m)
+		keys = append(keys, c.Prefix()+"."+m)
 	}
 	return
 }

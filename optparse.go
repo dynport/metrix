@@ -1,9 +1,9 @@
 package main
 
 import (
-	"os"
 	"errors"
 	"fmt"
+	"os"
 	"regexp"
 	"strings"
 )
@@ -16,15 +16,15 @@ const (
 
 type OptParser struct {
 	CurrentKey, CurrentValue string
-	KnownKeys []string
-	Defaults map[string]string
-	Values map[string]string
-	Descriptions map[string]string
+	KnownKeys                []string
+	Defaults                 map[string]string
+	Values                   map[string]string
+	Descriptions             map[string]string
 }
 
 func (self *OptParser) AddDescription(key, description string) {
 	if self.Descriptions == nil {
-		self.Descriptions = map[string]string { key: description }
+		self.Descriptions = map[string]string{key: description}
 	} else {
 		self.Descriptions[key] = description
 	}
@@ -32,24 +32,24 @@ func (self *OptParser) AddDescription(key, description string) {
 
 func (self *OptParser) PrintDefaults() {
 	table := NewTable()
-	table.Add([]string { "USAGE: " + os.Args[0] })
+	table.Add([]string{"USAGE: " + os.Args[0]})
 	for _, key := range self.KnownKeys {
 		value := self.Defaults[key]
-		line := []string { "  --" + key }
+		line := []string{"  --" + key}
 		ds := strings.Split(self.Descriptions[key], "\n")
 		line = append(line, ds[0])
 		table.Add(line)
 
 		for _, d := range ds[1:] {
-			table.Add([]string { "", d })
+			table.Add([]string{"", d})
 		}
 
 		if value != "" && value != "true" {
-			table.Add([]string { "", "DEFAULT: " + value })
+			table.Add([]string{"", "DEFAULT: " + value})
 		}
 
 		if len(ds) > 1 || (value != "" && value != "true") {
-			table.Add([]string {})
+			table.Add([]string{})
 		}
 	}
 	lines := table.Lines()
@@ -63,7 +63,7 @@ func (self *OptParser) AddKey(key, usage string) {
 
 func (self *OptParser) Add(key, defaultValue, usage string) {
 	if self.Defaults == nil {
-		self.Defaults = map[string]string {}
+		self.Defaults = map[string]string{}
 	}
 	self.Defaults[key] = defaultValue
 	self.AddKey(key, usage)
@@ -72,12 +72,12 @@ func (self *OptParser) Add(key, defaultValue, usage string) {
 func NewOptParser() *OptParser {
 	return &OptParser{
 		Defaults: map[string]string{},
-		Values: map[string]string {},
+		Values:   map[string]string{},
 	}
 }
 
 func (self *OptParser) ProcessAll(args []string) (e error) {
-	self.Values = map[string]string {}
+	self.Values = map[string]string{}
 	for _, arg := range args {
 		if e = self.Process(arg); e != nil {
 			return

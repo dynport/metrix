@@ -1,8 +1,8 @@
 package main
 
 import (
-	"strings"
 	"strconv"
+	"strings"
 )
 
 const LOADAVG = "loadavg"
@@ -14,19 +14,19 @@ func init() {
 type LoadAvg struct {
 }
 
-func (l* LoadAvg) Keys() []string {
-	return []string {
+func (l *LoadAvg) Keys() []string {
+	return []string{
 		"Load1m",
 		"Load5m",
 		"Load15m",
 	}
 }
 
-func (l* LoadAvg) Prefix() string {
+func (l *LoadAvg) Prefix() string {
 	return "load"
 }
 
-func (l* LoadAvg) Collect(c *MetricsCollection) (e error) {
+func (l *LoadAvg) Collect(c *MetricsCollection) (e error) {
 	s := ReadProcFile("loadavg")
 	chunks := strings.Split(s, " ")
 	if len(chunks) >= 3 {
@@ -43,7 +43,7 @@ func (l* LoadAvg) Collect(c *MetricsCollection) (e error) {
 	return
 }
 
-func (l* LoadAvg) ParseLoadAvg(s string) (i int64, e error) {
+func (l *LoadAvg) ParseLoadAvg(s string) (i int64, e error) {
 	if f, e := strconv.ParseFloat(s, 64); e == nil {
 		i = int64(f * 100)
 	}

@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"os"
 	"flag"
-	"net/http"
+	"fmt"
 	"io/ioutil"
+	"net/http"
+	"os"
 )
 
 func AbortWith(message string) {

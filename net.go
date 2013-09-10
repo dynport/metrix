@@ -2,9 +2,9 @@ package main
 
 import (
 	"errors"
-	"strconv"
 	"os/exec"
 	"regexp"
+	"strconv"
 )
 
 const NET = "net"
@@ -13,26 +13,26 @@ func init() {
 	parser.Add(NET, "true", "Collect network metrics")
 }
 
-var mapStatMapping = map[string]string {
-	"total packets received": "ip.TotalPacketsReceived",
-	"forwarded": "ip.Forwarded",
-	"incoming packets discarded": "ip.IncomingPacketsDiscarded",
-	"incoming packets delivered": "ip.IncomingPacketsDelivered",
-	"requests sent out": "ip.RequestsSentOut",
-	"active connections openings": "tcp.ActiveConnectionsOpenings",
-	"passive connection openings": "tcp.PassiveConnectionsOpenings",
-	"failed connection attempts": "tcp.FailedConnectionAttempts",
-	"connection resets received": "tcp.ConnectionResetsReceived",
-	"connections established": "tcp.ConnectionsEstablished",
-	"segments received": "tcp.SegmentsReceived",
-	"segments send out": "tcp.SegmentsSendOut",
-	"segments retransmited": "tcp.SegmentsTransmitted",
-	"bad segments received.": "tcp.BadSegmentsReceived",
-	"resets sent": "tcp.ResetsSent",
-	"packets received": "udp.PacketsReceived",
+var mapStatMapping = map[string]string{
+	"total packets received":            "ip.TotalPacketsReceived",
+	"forwarded":                         "ip.Forwarded",
+	"incoming packets discarded":        "ip.IncomingPacketsDiscarded",
+	"incoming packets delivered":        "ip.IncomingPacketsDelivered",
+	"requests sent out":                 "ip.RequestsSentOut",
+	"active connections openings":       "tcp.ActiveConnectionsOpenings",
+	"passive connection openings":       "tcp.PassiveConnectionsOpenings",
+	"failed connection attempts":        "tcp.FailedConnectionAttempts",
+	"connection resets received":        "tcp.ConnectionResetsReceived",
+	"connections established":           "tcp.ConnectionsEstablished",
+	"segments received":                 "tcp.SegmentsReceived",
+	"segments send out":                 "tcp.SegmentsSendOut",
+	"segments retransmited":             "tcp.SegmentsTransmitted",
+	"bad segments received.":            "tcp.BadSegmentsReceived",
+	"resets sent":                       "tcp.ResetsSent",
+	"packets received":                  "udp.PacketsReceived",
 	"packets to unknown port received.": "udp.PacketsToUnknownPortRecived",
-	"packet receive errors": "udp.PacketReceiveErrors",
-	"packets sent": "udp.PacketsSent",
+	"packet receive errors":             "udp.PacketReceiveErrors",
+	"packets sent":                      "udp.PacketsSent",
 }
 
 type Net struct {
@@ -55,7 +55,7 @@ func (self *Net) Prefix() string {
 	return "net"
 }
 
-func (self *Net) Collect(c* MetricsCollection) (e error) {
+func (self *Net) Collect(c *MetricsCollection) (e error) {
 	s, e := self.fetch()
 	if e != nil {
 		return
@@ -85,7 +85,7 @@ func (self *Net) Collect(c* MetricsCollection) (e error) {
 }
 
 func (self *Net) Keys() []string {
-	return []string {
+	return []string{
 		"ip.TotalPacketsReceived",
 		"ip.Forwarded",
 		"ip.IncomingPacketsDiscarded",

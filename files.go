@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	FILES = "files"
+	FILES      = "files"
 	FILES_OPEN = "Open"
 )
 
@@ -23,7 +23,7 @@ type Files struct {
 
 func (files *Files) fetch() (b []byte, e error) {
 	if len(files.RawStatus) == 0 {
-		args := []string { "-c" }
+		args := []string{"-c"}
 		args = append(args, LSOF_CMD)
 		files.RawStatus, _ = exec.Command("bash", args...).Output()
 		if len(files.RawStatus) == 0 {

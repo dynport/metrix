@@ -1,14 +1,14 @@
 package main
 
 import (
-	_ "github.com/lib/pq"
-	"errors"
-	"strings"
 	"database/sql"
-	"time"
-	"strconv"
+	"errors"
 	"fmt"
+	_ "github.com/lib/pq"
 	"net/url"
+	"strconv"
+	"strings"
+	"time"
 )
 
 const POSTGRES = "postgres"
@@ -16,9 +16,10 @@ const POSTGRES = "postgres"
 func init() {
 	parser.AddKey(POSTGRES, "Collect postgres metrics.\nEXAMPLE: psql://user:pwd@host/db")
 }
+
 type PostgresURL struct {
 	Host, User, Password, Database string
-	Port int
+	Port                           int
 }
 
 func (self *PostgresURL) ConnectString() (s string, e error) {
@@ -68,12 +69,12 @@ func ParsePostgresUrl(raw string) (out *PostgresURL) {
 
 type PostgreSQLStats struct {
 	Uri string
-	DB* sql.DB
+	DB  *sql.DB
 	*PostgresURL
 }
 
 func (self *PostgreSQLStats) Keys() []string {
-	return []string {
+	return []string{
 		"StatActivity", "tables.SeqScan", "tables.SeqTupRead", "tables.IdxScan", "tables.IdxTupFetch", "tables.NTupIns", "tables.NTupUpd", "tables.NTupDel",
 		"tables.NTupHotUpd", "tables.NLiveTup", "tables.NDeadTup", "tables.VacuumCount", "tables.AutoVacuumAcount", "tables.AnalyzeCount",
 		"tables.AutoAnalyzeCount", "databases.NumBackends", "databases.XactCommit", "databases.XactRollback", "databases.BlksRead", "databases.BlksHit",
@@ -100,7 +101,7 @@ func (self *PostgreSQLStats) Connect() (e error) {
 	return
 }
 
-func (self *PostgreSQLStats) Collect(c* MetricsCollection) (e error) {
+func (self *PostgreSQLStats) Collect(c *MetricsCollection) (e error) {
 	if e = self.Connect(); e != nil {
 		return
 	}
@@ -110,11 +111,11 @@ func (self *PostgreSQLStats) Collect(c* MetricsCollection) (e error) {
 		return
 	}
 	for _, stat := range stats {
-		tags := map[string]string {
+		tags := map[string]string{
 			"database": stat.Datname,
-			"pid": strconv.Itoa(stat.Pid),
-			"state": stat.State,
-			"waiting": strconv.FormatBool(stat.Waiting),
+			"pid":      strconv.Itoa(stat.Pid),
+			"state":    stat.State,
+			"waiting":  strconv.FormatBool(stat.Waiting),
 		}
 		c.AddWithTags("StatActivity", 1, tags)
 	}
@@ -124,8 +125,8 @@ func (self *PostgreSQLStats) Collect(c* MetricsCollection) (e error) {
 		return
 	}
 	for _, stat := range tableStats {
-		tags := map[string]string {
-			"table": stat.Relname,
+		tags := map[string]string{
+			"table":    stat.Relname,
 			"database": self.Database(),
 		}
 		c.AddWithTags("tables.SeqScan", stat.SeqScan, tags)
@@ -148,7 +149,7 @@ func (self *PostgreSQLStats) Collect(c* MetricsCollection) (e error) {
 		return
 	}
 	for _, stat := range dbStats {
-		tags := map[string]string {
+		tags := map[string]string{
 			"database": stat.Datname,
 		}
 		c.AddWithTags("databases.NumBackends", stat.NumBackends, tags)
@@ -174,10 +175,10 @@ func (self *PostgreSQLStats) Collect(c* MetricsCollection) (e error) {
 		return
 	}
 	for _, stat := range indexStats {
-		tags := map[string]string {
+		tags := map[string]string{
 			"database": self.Database(),
-			"table": stat.Relname,
-			"index": stat.IndexRelname,
+			"table":    stat.Relname,
+			"index":    stat.IndexRelname,
 		}
 		c.AddWithTags("indexes.IdxScan", stat.IdxScan, tags)
 		c.AddWithTags("indexes.IdxScan", stat.IdxScan, tags)
@@ -195,20 +196,20 @@ func (self *PostgreSQLStats) ParsedUrl() (u *PostgresURL) {
 }
 
 type PgTableStat struct {
-	Relname string
+	Relname                                                                                                           string
 	SeqScan, SeqTupRead, IdxScan, IdxTupFetch, NTupIns, NTupUpd, NTupDel, NTupHotUpd, NLiveTup, NDeadTup, VacuumCount int64
-	AutoVacuumAcount, AnalyzeCount, AutoAnalyzeCount int64
-	LastVacuum, LastAutoVacuum, LastAnalyze, LastAutoAnalyze *time.Time
+	AutoVacuumAcount, AnalyzeCount, AutoAnalyzeCount                                                                  int64
+	LastVacuum, LastAutoVacuum, LastAnalyze, LastAutoAnalyze                                                          *time.Time
 }
 
 type PgStatActivity struct {
-	Datname, State string
-	Pid int
+	Datname, State                                   string
+	Pid                                              int
 	BackendStart, XactStart, QueryStart, StateChange time.Time
-	Waiting bool
+	Waiting                                          bool
 }
 
-func (p* PostgreSQLStats) StatActivity() (out []*PgStatActivity, e error) {
+func (p *PostgreSQLStats) StatActivity() (out []*PgStatActivity, e error) {
 	rows, e := p.DB.Query("SELECT datname, pid, backend_start, xact_start, query_start, state_change, waiting, state FROM pg_stat_activity")
 	if e != nil {
 		return
@@ -228,8 +229,7 @@ const allTablesSQL = `
 	WHERE schemaname = 'public'
 `
 
-
-func (p* PostgreSQLStats) StatAllTables() (out []*PgTableStat, e error) {
+func (p *PostgreSQLStats) StatAllTables() (out []*PgTableStat, e error) {
 	rows, e := p.DB.Query(allTablesSQL)
 	if e != nil {
 		return
@@ -266,12 +266,12 @@ func (p* PostgreSQLStats) StatAllTables() (out []*PgTableStat, e error) {
 }
 
 type PgDatabaseStat struct {
-	Datname string
-	NumBackends, XactCommit, XactRollback, BlksRead, BlksHit int64
+	Datname                                                      string
+	NumBackends, XactCommit, XactRollback, BlksRead, BlksHit     int64
 	TupReturned, TupFetched, TupInserted, TupUpdated, TupDeleted int64
-	Conflicts, TempFiles, TempBytes, Deadlocks int64
-	BlkReadTime, BlkWriteTime  int64
-	StatsReset *time.Time
+	Conflicts, TempFiles, TempBytes, Deadlocks                   int64
+	BlkReadTime, BlkWriteTime                                    int64
+	StatsReset                                                   *time.Time
 }
 
 const statSQL = `
@@ -281,7 +281,7 @@ const statSQL = `
 	WHERE datname = '%s'
 `
 
-func (p* PostgreSQLStats) StatDatabases() (ret []*PgDatabaseStat, e error) {
+func (p *PostgreSQLStats) StatDatabases() (ret []*PgDatabaseStat, e error) {
 	rows, e := p.DB.Query(fmt.Sprintf(statSQL, p.Database))
 	if e != nil {
 		return
@@ -317,11 +317,11 @@ func (p* PostgreSQLStats) StatDatabases() (ret []*PgDatabaseStat, e error) {
 }
 
 type PgIndexStat struct {
-	Relname, IndexRelname string
+	Relname, IndexRelname            string
 	IdxScan, IdxTupRead, IdxTupFetch int64
 }
 
-func (p* PostgreSQLStats) IndexStats() (ret []*PgIndexStat, e error) {
+func (p *PostgreSQLStats) IndexStats() (ret []*PgIndexStat, e error) {
 	query := "SELECT relname, indexrelname, idx_scan, idx_tup_read, idx_tup_fetch FROM  pg_stat_all_indexes WHERE schemaname = 'public'"
 	rows, e := p.DB.Query(query)
 	if e != nil {
@@ -345,11 +345,11 @@ func (p* PostgreSQLStats) IndexStats() (ret []*PgIndexStat, e error) {
 }
 
 type PgBgWriterStat struct {
-	CheckpointsTimes, CheckpointsReq int64
-	CheckpointWriteTime, CheckpointSyncTime float64
-	BuffersCheckpoint, BuffersClean, MaxwrittenClean int64
+	CheckpointsTimes, CheckpointsReq                  int64
+	CheckpointWriteTime, CheckpointSyncTime           float64
+	BuffersCheckpoint, BuffersClean, MaxwrittenClean  int64
 	BuffersBackend, BuffersBackendFsync, BuffersAlloc int64
-	StatsReset *time.Time
+	StatsReset                                        *time.Time
 }
 
 const bgWriterSQL = `
@@ -358,7 +358,7 @@ const bgWriterSQL = `
 	FROM pg_stat_bgwriter
 `
 
-func (p* PostgreSQLStats) BgWriterStats() (ret []*PgBgWriterStat, e error) {
+func (p *PostgreSQLStats) BgWriterStats() (ret []*PgBgWriterStat, e error) {
 	rows, e := p.DB.Query(bgWriterSQL)
 	if e != nil {
 		return

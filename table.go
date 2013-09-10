@@ -12,8 +12,8 @@ type Table struct {
 
 func NewTable() *Table {
 	return &Table{
-		Columns: [][]string {},
-		Lengths: map[int]int {},
+		Columns: [][]string{},
+		Lengths: map[int]int{},
 	}
 }
 

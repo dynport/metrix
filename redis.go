@@ -1,8 +1,8 @@
 package main
 
 import (
-	"regexp"
 	"net"
+	"regexp"
 	"strings"
 )
 
@@ -14,7 +14,7 @@ func init() {
 
 type Redis struct {
 	Address string
-	Raw []byte
+	Raw     []byte
 }
 
 func (self *Redis) Prefix() string {
@@ -22,7 +22,7 @@ func (self *Redis) Prefix() string {
 }
 
 func (self *Redis) Keys() []string {
-	return []string {
+	return []string{
 		"UptimeInSeconds",
 		"memory.UsedMemory",
 		"memory.UsedMemoryRSS",
@@ -51,7 +51,7 @@ func (self *Redis) Keys() []string {
 
 var logger = &Logger{Prefix: "redis"}
 
-func (self *Redis) Collect(c* MetricsCollection) (e error) {
+func (self *Redis) Collect(c *MetricsCollection) (e error) {
 	logger.Info("collecting redis")
 	b, e := self.ReadInfo()
 	if e != nil {
@@ -70,9 +70,9 @@ func (self *Redis) Collect(c* MetricsCollection) (e error) {
 		}
 		res := dbRegexp.FindStringSubmatch(line)
 		if len(res) == 4 {
-			dbTags := map[string]string {
-				"db": res[1],
-				"pid": pid,
+			dbTags := map[string]string{
+				"db":   res[1],
+				"pid":  pid,
 				"port": tcp_port,
 			}
 			c.AddWithTags("db.Keys", parseInt64(res[2]), dbTags)
@@ -84,8 +84,8 @@ func (self *Redis) Collect(c* MetricsCollection) (e error) {
 			values[chunks[0]] = strings.Join(chunks[1:], ":")
 		}
 	}
-	tags := map[string]string {
-		"pid": pid,
+	tags := map[string]string{
+		"pid":  pid,
 		"port": tcp_port,
 	}
 

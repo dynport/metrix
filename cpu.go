@@ -1,22 +1,22 @@
 package main
 
 import (
-	"strings"
-	"strconv"
-	"regexp"
 	"io/ioutil"
 	"os"
+	"regexp"
+	"strconv"
+	"strings"
 )
 
-var statMapping = map[string]string {
-	"ctxt": "Ctxt",
-	"btime": "Btime",
-	"processes": "Processes",
+var statMapping = map[string]string{
+	"ctxt":          "Ctxt",
+	"btime":         "Btime",
+	"processes":     "Processes",
 	"procs_running": "ProcsRunning",
 	"procs_blocked": "ProcsBlocked",
 }
 
-var cpuLineMapping = map[int]string {
+var cpuLineMapping = map[int]string{
 	1: "User",
 	2: "Nice",
 	3: "System",
@@ -35,12 +35,12 @@ func init() {
 type Cpu struct {
 }
 
-func (* Cpu) Prefix() string {
+func (*Cpu) Prefix() string {
 	return "cpu"
 }
 
-func (* Cpu) Keys() ([]string) {
-	return []string {
+func (*Cpu) Keys() []string {
+	return []string{
 		"Ctxt",
 		"Btime",
 		"Processes",
@@ -67,7 +67,7 @@ func ReadProcFile(path string) (r string) {
 	return
 }
 
-func (cpu* Cpu) Collect(c *MetricsCollection) (e error) {
+func (cpu *Cpu) Collect(c *MetricsCollection) (e error) {
 	str := ReadProcFile("stat")
 	for _, line := range strings.Split(str, "\n") {
 		chunks := strings.Split(line, " ")
@@ -84,7 +84,7 @@ func (cpu* Cpu) Collect(c *MetricsCollection) (e error) {
 	return
 }
 
-func (cpu* Cpu) CollectCpu(c *MetricsCollection, line string) (metrics []*Metric) {
+func (cpu *Cpu) CollectCpu(c *MetricsCollection, line string) (metrics []*Metric) {
 	wsRe := regexp.MustCompile("[\\s]+")
 	chunks := wsRe.Split(line, -1)
 
