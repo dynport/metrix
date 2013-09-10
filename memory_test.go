@@ -1,9 +1,17 @@
 package main
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
+
+func aggregateStats(stats []*Metric) map[string]int64 {
+	agg := map[string]int64{}
+	for _, stat := range stats {
+		agg[stat.Key] = stat.Value
+	}
+	return agg
+}
 
 func TestMemory(t *testing.T) {
 	m := &Memory{}
@@ -14,4 +22,7 @@ func TestMemory(t *testing.T) {
 	assert.Equal(t, len(stats), 42)
 	assert.Equal(t, stats[0].Key, "memory.MemTotal")
 	assert.Equal(t, stats[0].Value, 502976)
+
+	agg := aggregateStats(stats)
+	assert.Equal(t, agg["memory.Committed_AS"], 350856)
 }
