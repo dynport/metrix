@@ -27,3 +27,17 @@ func TestNormlizeProcessName(t *testing.T) {
 	assert.Equal(t, NormalizeProcessName("(int)"), "int")
 	assert.Equal(t, NormalizeProcessName("(kworker/2:1H)"), "kworker")
 }
+
+func BenchmarkNormlizeProcessName(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		NormalizeProcessName("(kworker/2:1H)")
+	}
+}
+
+func BenchmarkCollect(b *testing.B) {
+	mh := new(MetricHandler)
+	col := &Processes{}
+	for i := 0; i < b.N; i++ {
+		mh.Collect(col)
+	}
+}
