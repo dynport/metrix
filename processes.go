@@ -72,8 +72,10 @@ func (self *Processes) Keys() []string {
 	}
 }
 
+var matchBrackets = regexp.MustCompile("(^\\(|\\)$)")
+
 func NormalizeProcessName(comm string) string {
-	withoutBrackes := regexp.MustCompile("(^\\(|\\)$)").ReplaceAllString(comm, "")
+	withoutBrackes := matchBrackets.ReplaceAllString(comm, "")
 	return strings.Split(withoutBrackes, "/")[0]
 }
 
