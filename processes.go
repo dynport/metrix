@@ -2,7 +2,7 @@ package main
 
 import (
 	"io/ioutil"
-	"path/filepath"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -79,12 +79,39 @@ func NormalizeProcessName(comm string) string {
 	return strings.Split(withoutBrackes, "/")[0]
 }
 
+var matchNums = regexp.MustCompile("[0-9]+")
+
+func generateProcfiles() (matches chan string, e error) {
+	procmount := ProcRoot()  + "/proc"
+	d, e := os.Open(procmount)
+	if e != nil {
+		return nil, e
+	}
+
+	matches = make(chan string, 100)
+	go func(dir *os.File) {
+		for e := error(nil); e == error(nil); {
+			names, e := dir.Readdirnames(100)
+			if e != nil {
+				break
+			}
+			for _, name := range names {
+				if matchNums.MatchString(name) {
+					matches <- procmount + "/" + name + "/stat"
+				}
+			}
+		}
+		close(matches)
+	}(d)
+	return matches, nil
+}
+
 func (self *Processes) Collect(c *MetricsCollection) (e error) {
-	matches, e := filepath.Glob(ProcRoot() + "/proc/[0-9]*/stat")
+	matches, e := generateProcfiles()
 	if e != nil {
 		return
 	}
-	for _, path := range matches {
+	for path := range matches {
 		if data, e := ioutil.ReadFile(path); e == nil {
 			chunks := strings.Split(string(data), " ")
 			tags := map[string]string{
