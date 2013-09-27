@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"os/exec"
-	"regexp"
 	"strconv"
 	"strings"
 )
@@ -54,13 +53,12 @@ func CollectDf(t string, raw []byte, c *MetricsCollection) (e error) {
 		}
 	}
 	lines := strings.Split(strings.TrimSpace(string(raw)), "\n")
-	re := regexp.MustCompile("\\s+")
 	for _, line := range lines[1:] {
 		if !strings.HasPrefix(line, "/") {
 			continue
 		}
-		chunks := re.Split(line, 6)
-		if len(chunks) == 6 {
+		chunks := strings.Fields(line)
+		if len(chunks) >= 6 {
 			tags := map[string]string{
 				"file_system": chunks[0],
 				"mounted_on":  chunks[5],
