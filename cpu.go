@@ -85,8 +85,7 @@ func (cpu *Cpu) Collect(c *MetricsCollection) (e error) {
 }
 
 func (cpu *Cpu) CollectCpu(c *MetricsCollection, line string) (metrics []*Metric) {
-	wsRe := regexp.MustCompile("[\\s]+")
-	chunks := wsRe.Split(line, -1)
+	chunks := strings.Fields(line)
 
 	re := regexp.MustCompile("^cpu(\\d+)")
 	mets := re.FindStringSubmatch(chunks[0])
