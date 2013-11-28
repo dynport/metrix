@@ -10,6 +10,7 @@ import (
 type OutputHandler struct {
 	OpenTSDBAddress string
 	GraphiteAddress string
+	AmqpAddress     string
 	Hostname        string
 }
 
@@ -30,6 +31,15 @@ func (o *OutputHandler) WriteMetrics(all []*Metric) (e error) {
 	if o.GraphiteAddress != "" {
 		e = SendMetricsToGraphite(o.GraphiteAddress, all, o.Hostname)
 		sent = true
+	}
+
+	if o.AmqpAddress != "" {
+		e = PublishMetricsWithAMQP(o.AmqpAddress, all, o.Hostname)
+		if e != nil {
+			logger.Error("ERROR: " + e.Error())
+		} else {
+			sent = true
+		}
 	}
 
 	if !sent {

@@ -9,7 +9,7 @@ type Config struct {
 	OpenTSDBUrl string `json:"opentsdb_url"`
 }
 
-var OUTPUTS = []string{"graphite", "opentsdb"}
+var OUTPUTS = []string{"graphite", "opentsdb", "amqp"}
 
 func processCollector(mh *MetricHandler, output *OutputHandler, c MetricCollector) (e error) {
 	all, e := mh.Collect(c)
@@ -28,12 +28,14 @@ const (
 
 	OPENTSDB = "opentsdb"
 	GRAPHITE = "graphite"
+	AMQP     = "amqp"
 )
 
 func init() {
 	parser.Add(HELP, "true", "Print this usage page")
 	parser.Add(KEYS, "true", "Only list all known keys")
 	parser.AddKey(OPENTSDB, "Report metrics to OpenTSDB host.\nEXAMPLE: opentsdb.host:4242")
+	parser.AddKey(AMQP, "Report metrics to AMQP host.\nEXAMPLE: amqp.host:5672")
 	parser.AddKey(GRAPHITE, "Report metrics to Graphite host.\nEXAMPLE: graphite.host:2003")
 	parser.AddKey(HOSTNAME, "Hostname to be used for tagging. If blank the local hostname is used")
 }
@@ -50,17 +52,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	output := &OutputHandler{}
-	if a := parser.Get(OPENTSDB); a != "" {
-		output.OpenTSDBAddress = a
+	output := &OutputHandler{
+		OpenTSDBAddress: parser.Get(OPENTSDB),
+		GraphiteAddress: parser.Get(GRAPHITE),
+		AmqpAddress:     parser.Get(AMQP),
 	}
-	if a := parser.Get(GRAPHITE); a != "" {
-		output.GraphiteAddress = a
-	}
-	if a := parser.Get(HOSTNAME); a != "" {
-		output.Hostname = a
-	}
-
 	collectors := map[string]MetricCollector{
 		ELASTICSEARCH: &ElasticSearch{Url: parser.Get(ELASTICSEARCH)},
 		REDIS:         &Redis{Address: parser.Get(REDIS)},
