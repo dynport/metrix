@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -21,4 +22,16 @@ func TestRiakStatus(t *testing.T) {
 
 	assert.Equal(t, len(status.RingMembers), 5)
 	assert.Equal(t, status.RingMembers[0], "riak@192.168.0.16")
+}
+
+func TestSerializeMetric(t *testing.T) {
+	m := &Metric{}
+	b, e := json.Marshal(m)
+	assert.Nil(t, e)
+	assert.NotContains(t, string(b), "Tags")
+
+	m.Tags = map[string]string{"a": "b"}
+	b, e = json.Marshal(m)
+	assert.Nil(t, e)
+	assert.Contains(t, string(b), "Tags")
 }

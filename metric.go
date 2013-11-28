@@ -12,7 +12,7 @@ import (
 type Metric struct {
 	Key   string
 	Value int64
-	Tags  map[string]string
+	Tags  map[string]string `json:"Tags,omitempty"`
 }
 
 func parseInt(s string) (i int) {
