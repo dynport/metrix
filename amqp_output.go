@@ -35,6 +35,7 @@ func PublishMetricsWithAMQP(address string, metrics []*Metric, hostname string) 
 		e = channel.Publish(AMQP_EXCHANGE, amqpKey, false, false, amqp.Publishing{
 			Body:        b,
 			ContentType: "application/json",
+			Timestamp:   time.Now(),
 		})
 		if e != nil {
 			logger.Error("error publishing " + e.Error())
