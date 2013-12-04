@@ -72,7 +72,10 @@ func (es *ElasticSearch) ReadStatus() (b []byte, e error) {
 func (es *ElasticSearch) ParseStatus(b []byte) (ess *ElasticSearchStatus, e error) {
 	ess = &ElasticSearchStatus{}
 	e = json.Unmarshal(b, ess)
-	return
+	if e != nil {
+		return nil, e
+	}
+	return ess, nil
 }
 
 func (es *ElasticSearch) CollectMetricsFromStats(mc *MetricsCollection, s *ElasticSearchStatus) {
