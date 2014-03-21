@@ -20,7 +20,7 @@ func FetchURL(url string) (b []byte, e error) {
 	if e != nil {
 		return
 	}
-
+	defer rsp.Body.Close()
 	b, e = ioutil.ReadAll(rsp.Body)
 	return
 }
