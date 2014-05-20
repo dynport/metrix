@@ -58,21 +58,21 @@ func main() {
 		AmqpAddress:     parser.Get(AMQP),
 	}
 	collectors := map[string]MetricCollector{
+		CPU:           &Cpu{},     // migrated
+		LOADAVG:       &LoadAvg{}, // migrated
+		MEMORY:        &Memory{},  // migrated
+		NET:           &Net{},     // migrated
+		FREE:          &Free{},    // migrated
+		DF:            &Df{},      // migrated
+		PROCESSES:     &Processes{},
+		FILES:         &Files{},
 		ELASTICSEARCH: &ElasticSearch{Url: parser.Get(ELASTICSEARCH)},
 		REDIS:         &Redis{Address: parser.Get(REDIS)},
-		CPU:           &Cpu{},
-		LOADAVG:       &LoadAvg{},
-		MEMORY:        &Memory{},
 		DISK:          &Disk{},
-		DF:            &Df{},
-		NET:           &Net{},
-		FREE:          &Free{},
-		PROCESSES:     &Processes{},
 		RIAK:          &Riak{Address: parser.Get(RIAK)},
 		PGBOUNCER:     &PgBouncer{Address: parser.Get(PGBOUNCER)},
 		POSTGRES:      &PostgreSQLStats{Uri: parser.Get(POSTGRES)},
 		NGINX:         &Nginx{Address: parser.Get(NGINX)},
-		FILES:         &Files{},
 	}
 
 	mh := &MetricHandler{}
