@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"strconv"
 )
 
 type MetricsCollection struct {
@@ -36,6 +37,14 @@ func (m *MetricsCollection) AddWithTags(key string, v int64, tags map[string]str
 		fmt.Println("ERROR", e.Error())
 	}
 	return
+}
+
+func (m *MetricsCollection) MustAddString(key, value string) error {
+	i, e := strconv.ParseInt(value, 10, 64)
+	if e != nil {
+		return e
+	}
+	return m.Add(key, i)
 }
 
 func (m *MetricsCollection) Add(key string, v int64) (e error) {

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 var freeResult = map[string]int{
@@ -18,11 +18,13 @@ var freeResult = map[string]int{
 }
 
 func TestFree(t *testing.T) {
-	mh := new(MetricHandler)
-	free := &Free{RawStatus: readFile("fixtures/free.txt")}
-	stats, _ := mh.Collect(free)
-	agg := aggregateStats(stats)
-	for k, v := range freeResult {
-		assert.Equal(t, agg[k], v, fmt.Sprintf("expected %s to have value %v but was %v", k, v, agg[k]))
-	}
+	Convey("Free", t, func() {
+		mh := new(MetricHandler)
+		free := &Free{RawStatus: readFile("fixtures/free.txt")}
+		stats, _ := mh.Collect(free)
+		agg := aggregateStats(stats)
+		for k, v := range freeResult {
+			So(agg[k], ShouldEqual, v)
+		}
+	})
 }

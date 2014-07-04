@@ -1,18 +1,22 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestCpu(t *testing.T) {
-	mh := &MetricHandler{}
-	stats, _ := mh.Collect(&Cpu{})
-	assert.Equal(t, len(stats), 19)
-	assert.Equal(t, stats[0].Key, "cpu.User")
-	assert.Equal(t, stats[0].Tags["total"], "true")
-	assert.Equal(t, stats[0].Value, 3700)
+	Convey("MetricHandler", t, func() {
+		mh := &MetricHandler{}
+		stats, _ := mh.Collect(&Cpu{})
+		So(len(stats), ShouldEqual, 19)
+		So(stats[0].Key, ShouldEqual, "cpu.User")
+		So(stats[0].Key, ShouldEqual, "cpu.User")
+		So(stats[0].Tags["total"], ShouldEqual, "true")
+		So(stats[0].Value, ShouldEqual, 3700)
 
-	assert.Equal(t, stats[14].Key, "cpu.Ctxt")
-	assert.Equal(t, stats[14].Value, 957584)
+		So(stats[14].Key, ShouldEqual, "cpu.Ctxt")
+		So(stats[14].Value, ShouldEqual, 957584)
+	})
 }

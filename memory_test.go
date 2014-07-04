@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func aggregateStats(stats []*Metric) map[string]int64 {
@@ -14,15 +15,17 @@ func aggregateStats(stats []*Metric) map[string]int64 {
 }
 
 func TestMemory(t *testing.T) {
-	m := &Memory{}
-	mh := &MetricHandler{}
-	stats, _ := mh.Collect(m)
+	Convey("Memory", t, func() {
+		m := &Memory{}
+		mh := &MetricHandler{}
+		stats, _ := mh.Collect(m)
 
-	assert.True(t, len(stats) > 10)
-	assert.Equal(t, len(stats), 42)
-	assert.Equal(t, stats[0].Key, "memory.MemTotal")
-	assert.Equal(t, stats[0].Value, 502976)
+		So(len(stats) > 10, ShouldBeTrue)
+		So(len(stats), ShouldEqual, 42)
+		So(stats[0].Key, ShouldEqual, "memory.MemTotal")
+		So(stats[0].Value, ShouldEqual, 502976)
 
-	agg := aggregateStats(stats)
-	assert.Equal(t, agg["memory.Committed_AS"], 350856)
+		agg := aggregateStats(stats)
+		So(agg["memory.Committed_AS"], ShouldEqual, 350856)
+	})
 }

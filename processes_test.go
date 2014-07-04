@@ -1,31 +1,38 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestProcesses(t *testing.T) {
-	mh := new(MetricHandler)
-	col := &Processes{}
-	stats, _ := mh.Collect(col)
-	assert.True(t, len(stats) > 0)
-	assert.Equal(t, len(stats), 980)
-	for _, stat := range stats {
-		if stat.Tags["name"] == "init" && stat.Key == "processes.Utime" {
-			assert.Equal(t, stat.Key, "processes.Utime")
-			assert.Equal(t, stat.Value, 25)
-			assert.Equal(t, stat.Tags["comm"], "(init)")
-			assert.Equal(t, stat.Tags["name"], "init")
-			assert.Equal(t, stat.Tags["state"], "S")
-			assert.Equal(t, stat.Tags["pid"], "1")
+	Convey("Processes", t, func() {
+		mh := new(MetricHandler)
+		col := &Processes{}
+		stats, _ := mh.Collect(col)
+		So(len(stats), ShouldBeGreaterThan, 0)
+		So(len(stats), ShouldEqual, 980)
+		for _, stat := range stats {
+			if stat.Tags["name"] == "init" && stat.Key == "processes.Utime" {
+				So(stat.Key, ShouldEqual, "processes.Utime")
+				So(stat.Value, ShouldEqual, 25)
+				So(stat.Tags["comm"], ShouldEqual, "(init)")
+				So(stat.Tags["name"], ShouldEqual, "init")
+				So(stat.Tags["state"], ShouldEqual, "S")
+				So(stat.Tags["pid"], ShouldEqual, "1")
+			}
 		}
-	}
+
+	})
 }
 
 func TestNormlizeProcessName(t *testing.T) {
-	assert.Equal(t, NormalizeProcessName("(int)"), "int")
-	assert.Equal(t, NormalizeProcessName("(kworker/2:1H)"), "kworker")
+	Convey("NormalizeProcessName", t, func() {
+		So(NormalizeProcessName("(int)"), ShouldEqual, "int")
+		So(NormalizeProcessName("(kworker/2:1H)"), ShouldEqual, "kworker")
+
+	})
 }
 
 func BenchmarkNormlizeProcessName(b *testing.B) {

@@ -1,28 +1,30 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestFiles(t *testing.T) {
-	files := &Files{RawStatus: readFile("fixtures/lsof.txt")}
-	assert.Equal(t, files.Prefix(), "files")
-	assert.NotEmpty(t, files.Keys())
+	Convey("Files", t, func() {
+		files := &Files{RawStatus: readFile("fixtures/lsof.txt")}
 
-	mh := new(MetricHandler)
-	stats, _ := mh.Collect(files)
-	assert.True(t, len(stats) > 4)
-	assert.Equal(t, len(stats), 74)
+		So(files.Prefix(), ShouldEqual, "files")
+		So(len(files.Keys()), ShouldNotEqual, 0)
 
-	names := map[string]int{}
-	for _, s := range stats {
-		names[s.Tags["name"]]++
-	}
-	assert.Equal(t, names["kworker/0"], 0)
-	assert.Equal(t, names["kworker"], 8)
-}
+		mh := new(MetricHandler)
+		stats, _ := mh.Collect(files)
+		So(len(stats) > 4, ShouldBeTrue)
 
-func TestParseLsofOutput(t *testing.T) {
-	return
+		So(len(stats), ShouldEqual, 74)
+
+		names := map[string]int{}
+		for _, s := range stats {
+			names[s.Tags["name"]]++
+		}
+		So(names["kworker/0"], ShouldEqual, 0)
+		So(names["kworker"], ShouldEqual, 8)
+
+	})
 }

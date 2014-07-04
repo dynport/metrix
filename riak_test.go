@@ -1,17 +1,21 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestRiakMetrics(t *testing.T) {
-	mh := &MetricHandler{}
-	col := &Riak{Raw: readFile("fixtures/riak.json")}
-	metrics, _ := mh.Collect(col)
+	Convey("RiakMetrics", t, func() {
+		mh := &MetricHandler{}
+		col := &Riak{Raw: readFile("fixtures/riak.json")}
+		metrics, _ := mh.Collect(col)
 
-	assert.Equal(t, len(metrics), 126)
-	m1 := metrics[0]
-	assert.Equal(t, m1.Key, "riak.VNodeGets")
-	assert.Equal(t, m1.Value, 241)
+		So(len(metrics), ShouldEqual, 126)
+		m1 := metrics[0]
+		So(m1.Key, ShouldEqual, "riak.VNodeGets")
+		So(m1.Value, ShouldEqual, 241)
+
+	})
 }

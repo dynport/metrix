@@ -3,20 +3,21 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestNet(t *testing.T) {
-	mh := new(MetricHandler)
-	net := &Net{RawStatus: readFile("fixtures/netstat.txt")}
-	stats, _ := mh.Collect(net)
-	assert.True(t, len(stats) > 4)
-	assert.Equal(t, len(stats), 21)
-
-	assert.Equal(t, stats[0].Key, "net.ip.TotalPacketsReceived")
-	assert.Equal(t, stats[0].Value, int64(162673))
-
-	assert.Equal(t, stats[20].Key, "net.ip.OutOctets")
-	assert.Equal(t, stats[20].Value, int64(667161104))
+	Convey("Net", t, func() {
+		mh := new(MetricHandler)
+		net := &Net{RawStatus: readFile("fixtures/netstat.txt")}
+		stats, _ := mh.Collect(net)
+		So(len(stats) > 4, ShouldBeTrue)
+		So(len(stats), ShouldEqual, 21)
+		So(stats[0].Key, ShouldEqual, "net.ip.TotalPacketsReceived")
+		So(stats[0].Value, ShouldEqual, int64(162673))
+		So(stats[20].Key, ShouldEqual, "net.ip.OutOctets")
+		So(stats[20].Value, ShouldEqual, int64(667161104))
+	})
 }

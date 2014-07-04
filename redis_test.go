@@ -1,15 +1,19 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestParseRedis(t *testing.T) {
-	logger.LogLevel = WARN
-	mh := &MetricHandler{}
-	es := &Redis{Raw: readFile("fixtures/redis_info.txt")}
+	Convey("Redis", t, func() {
+		logger.LogLevel = WARN
+		mh := &MetricHandler{}
+		es := &Redis{Raw: readFile("fixtures/redis_info.txt")}
 
-	all, _ := mh.Collect(es)
-	assert.True(t, len(all) > 0)
+		all, _ := mh.Collect(es)
+		So(len(all), ShouldBeGreaterThan, 0)
+
+	})
 }

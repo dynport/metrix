@@ -1,21 +1,31 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestParseNginx(t *testing.T) {
-	logger.LogLevel = INFO
-	mh := &MetricHandler{}
-	nginx := &Nginx{Raw: readFile("fixtures/nginx.status")}
+	Convey("Nginx", t, func() {
+		logger.LogLevel = INFO
+		mh := &MetricHandler{}
+		nginx := &Nginx{Raw: readFile("fixtures/nginx.status")}
 
-	all, _ := mh.Collect(nginx)
-	assert.Equal(t, len(all), 7)
+		all, e := mh.Collect(nginx)
+		So(e, ShouldBeNil)
 
-	assert.Equal(t, all[0].Key, "nginx.ActiveConnections")
-	assert.Equal(t, all[0].Value, 10)
+		for _, m := range all {
+			t.Logf("%s: %v", m.Key, m.Value)
+		}
 
-	assert.Equal(t, all[6].Key, "nginx.Waiting")
-	assert.Equal(t, all[6].Value, 70)
+		So(len(all), ShouldEqual, 7)
+
+		So(all[0].Key, ShouldEqual, "nginx.ActiveConnections")
+		So(all[0].Value, ShouldEqual, 10)
+
+		So(all[6].Key, ShouldEqual, "nginx.Waiting")
+		So(all[6].Value, ShouldEqual, 70)
+
+	})
 }

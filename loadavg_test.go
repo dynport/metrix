@@ -1,15 +1,18 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestLoadAvg(t *testing.T) {
-	mh := &MetricHandler{}
-	stats, _ := mh.Collect(&LoadAvg{})
-	assert.Equal(t, len(stats), 3)
-	assert.Equal(t, stats[0].Value, 3)
-	assert.Equal(t, stats[1].Value, 7)
-	assert.Equal(t, stats[2].Value, 8)
+	Convey("TestLoadAvg", t, func() {
+		mh := &MetricHandler{}
+		stats, _ := mh.Collect(&LoadAvg{})
+		So(len(stats), ShouldEqual, 3)
+		So(stats[0].Value, ShouldEqual, 3)
+		So(stats[1].Value, ShouldEqual, 7)
+		So(stats[2].Value, ShouldEqual, 8)
+	})
 }

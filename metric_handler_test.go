@@ -1,14 +1,18 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestMetricKeys(t *testing.T) {
-	col := &MetricHandler{}
-	es := &ElasticSearch{}
-	keys := col.Keys(es)
-	assert.True(t, len(keys) > 0)
-	assert.Equal(t, keys[0], "elasticsearch.shards.Total")
+	Convey("MetricKeys", t, func() {
+		col := &MetricHandler{}
+		es := &ElasticSearch{}
+		keys := col.Keys(es)
+		So(len(keys) > 0, ShouldBeTrue)
+		So(keys[0], ShouldEqual, "elasticsearch.shards.Total")
+
+	})
 }

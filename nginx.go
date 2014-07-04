@@ -1,9 +1,10 @@
 package main
 
 import (
-	"errors"
-	"regexp"
+	"bufio"
+	"bytes"
 	"strconv"
+	"strings"
 )
 
 const NGINX = "nginx"
@@ -17,16 +18,22 @@ type Nginx struct {
 	Raw     []byte
 }
 
-var nginxRegexp = regexp.MustCompile("Active connections: ([\\d]+)\\s+\nserver.*?\n\\s+([\\d]+)\\s+([\\d]+)\\s+([\\d]+)\\s+\nReading: ([\\d]+)\\s+Writing: ([\\d]+)\\s+Waiting: ([\\d]+)")
+const (
+	ac            = "Active connections: "
+	nginxSecond   = "server accepts"
+	nginxAc       = "ActiveConnections"
+	nginxAccepts  = "Accepts"
+	nginxHandled  = "Handled"
+	nginxRequests = "Requests"
+	nginxReading  = "Reading"
+	nginxWriting  = "Writing"
+	nginxWaiting  = "Waiting"
+)
 
-var nginxMapping = map[string]int{
-	"ActiveConnections": 1,
-	"Accepts":           2,
-	"Handled":           3,
-	"Requests":          4,
-	"Reading":           5,
-	"Writing":           6,
-	"Waiting":           7,
+var nginxKeyMapping = map[string]string{
+	"Reading:": nginxReading,
+	"Writing:": nginxWriting,
+	"Waiting:": nginxWaiting,
 }
 
 func (self *Nginx) Collect(c *MetricsCollection) (e error) {
@@ -36,21 +43,53 @@ func (self *Nginx) Collect(c *MetricsCollection) (e error) {
 			return
 		}
 	}
-	s := string(self.Raw)
-	m := nginxRegexp.FindStringSubmatch(s)
-	if len(m) == 0 {
-		return errors.New("could not parse nginx status")
-	}
-	for key, idx := range nginxMapping {
-		if idx < len(m) {
-			i, e := strconv.ParseInt(m[idx], 10, 64)
-			if e == nil {
-				c.Add(key, i)
+
+	scanner := bufio.NewScanner(bytes.NewReader(self.Raw))
+	state := ""
+	for scanner.Scan() {
+		txt := strings.TrimSpace(scanner.Text())
+		if strings.HasPrefix(txt, ac) {
+			acs, e := strconv.ParseInt(strings.TrimPrefix(txt, ac), 10, 64)
+			if e != nil {
+				return e
+			}
+			c.Add("ActiveConnections", acs)
+		} else if strings.HasPrefix(txt, nginxSecond) {
+			state = "secondLine"
+		} else if state == "secondLine" {
+			fields := strings.Fields(txt)
+			if len(fields) == 3 {
+				e := c.MustAddString(nginxAccepts, fields[0])
+				if e != nil {
+					return e
+				}
+				e = c.MustAddString(nginxHandled, fields[1])
+				if e != nil {
+					return e
+				}
+				e = c.MustAddString(nginxRequests, fields[2])
+				if e != nil {
+					return e
+				}
+			}
+			state = ""
+		} else if strings.HasPrefix(txt, "Reading") {
+			fields := strings.Fields(txt)
+			last := ""
+			for _, f := range fields {
+				if key, ok := nginxKeyMapping[last]; ok {
+					e := c.MustAddString(key, f)
+					if e != nil {
+						return e
+					}
+				}
+				last = f
 			}
 
 		}
+
 	}
-	return
+	return scanner.Err()
 }
 
 func (self *Nginx) Prefix() string {

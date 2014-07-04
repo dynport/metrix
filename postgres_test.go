@@ -1,19 +1,23 @@
 package main
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestParsePostgresUrl(t *testing.T) {
-	raw := "psql://ff:ffpwd@127.0.0.1:1234/ff_test"
-	u := ParsePostgresUrl(raw)
-	assert.Equal(t, u.Host, "127.0.0.1")
-	assert.Equal(t, u.User, "ff")
-	assert.Equal(t, u.Password, "ffpwd")
-	assert.Equal(t, u.Database, "ff_test")
-	assert.Equal(t, u.Port, 1234)
+	Convey("PostgresUrl", t, func() {
+		raw := "psql://ff:ffpwd@127.0.0.1:1234/ff_test"
+		u := ParsePostgresUrl(raw)
+		So(u.Host, ShouldEqual, "127.0.0.1")
+		So(u.User, ShouldEqual, "ff")
+		So(u.Password, ShouldEqual, "ffpwd")
+		So(u.Database, ShouldEqual, "ff_test")
+		So(u.Port, ShouldEqual, 1234)
 
-	s, _ := u.ConnectString()
-	assert.Equal(t, s, "host=127.0.0.1 dbname=ff_test user=ff password=ffpwd port=1234 sslmode=disable")
+		s, _ := u.ConnectString()
+		So(s, ShouldEqual, "host=127.0.0.1 dbname=ff_test user=ff password=ffpwd port=1234 sslmode=disable")
+
+	})
 }
