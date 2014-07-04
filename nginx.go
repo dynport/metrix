@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"strconv"
 	"strings"
 )
 
@@ -19,21 +18,22 @@ type Nginx struct {
 }
 
 const (
-	ac            = "Active connections: "
-	nginxSecond   = "server accepts"
-	nginxAc       = "ActiveConnections"
-	nginxAccepts  = "Accepts"
-	nginxHandled  = "Handled"
-	nginxRequests = "Requests"
-	nginxReading  = "Reading"
-	nginxWriting  = "Writing"
-	nginxWaiting  = "Waiting"
+	nginxActiveConnectionsPrefix = "Active connections: "
+	nginxSecondLinePrefix        = "server accepts"
+	nginxSecondLineState         = "secondLine"
+	nginxKeyActiveConnections    = "ActiveConnections"
+	nginxKeyAccepts              = "Accepts"
+	nginxKeyHandled              = "Handled"
+	nginxKeyRequests             = "Requests"
+	nginxKeyReading              = "Reading"
+	nginxKeyWriting              = "Writing"
+	nginxKeyWaiting              = "Waiting"
 )
 
 var nginxKeyMapping = map[string]string{
-	"Reading:": nginxReading,
-	"Writing:": nginxWriting,
-	"Waiting:": nginxWaiting,
+	"Reading:": nginxKeyReading,
+	"Writing:": nginxKeyWriting,
+	"Waiting:": nginxKeyWaiting,
 }
 
 func (self *Nginx) Collect(c *MetricsCollection) (e error) {
@@ -43,31 +43,29 @@ func (self *Nginx) Collect(c *MetricsCollection) (e error) {
 			return
 		}
 	}
-
 	scanner := bufio.NewScanner(bytes.NewReader(self.Raw))
 	state := ""
 	for scanner.Scan() {
 		txt := strings.TrimSpace(scanner.Text())
-		if strings.HasPrefix(txt, ac) {
-			acs, e := strconv.ParseInt(strings.TrimPrefix(txt, ac), 10, 64)
+		if strings.HasPrefix(txt, nginxActiveConnectionsPrefix) {
+			e = c.MustAddString(nginxKeyActiveConnections, strings.TrimPrefix(txt, nginxActiveConnectionsPrefix))
 			if e != nil {
 				return e
 			}
-			c.Add("ActiveConnections", acs)
-		} else if strings.HasPrefix(txt, nginxSecond) {
-			state = "secondLine"
-		} else if state == "secondLine" {
+		} else if strings.HasPrefix(txt, nginxSecondLinePrefix) {
+			state = nginxSecondLineState
+		} else if state == nginxSecondLineState {
 			fields := strings.Fields(txt)
 			if len(fields) == 3 {
-				e := c.MustAddString(nginxAccepts, fields[0])
+				e := c.MustAddString(nginxKeyAccepts, fields[0])
 				if e != nil {
 					return e
 				}
-				e = c.MustAddString(nginxHandled, fields[1])
+				e = c.MustAddString(nginxKeyHandled, fields[1])
 				if e != nil {
 					return e
 				}
-				e = c.MustAddString(nginxRequests, fields[2])
+				e = c.MustAddString(nginxKeyRequests, fields[2])
 				if e != nil {
 					return e
 				}
