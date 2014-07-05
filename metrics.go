@@ -1,5 +1,7 @@
 package main
 
+type MetricsMap map[string]int64
+
 type Metrics []*Metric
 
 func (list Metrics) Len() int {
