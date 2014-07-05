@@ -31,19 +31,6 @@ var dfFlgaMapping = map[string]string{
 	INODE: "-i",
 }
 
-func (self *Df) Keys() []string {
-	return []string{
-		SPACE + ".Total",
-		SPACE + ".Used",
-		SPACE + ".Available",
-		SPACE + ".Use",
-		INODE + ".Total",
-		INODE + ".Used",
-		INODE + ".Available",
-		INODE + ".Use",
-	}
-}
-
 func CollectDf(t string, raw []byte, c *MetricsCollection) (e error) {
 	if len(raw) == 0 {
 		if flag, ok := dfFlgaMapping[t]; ok {

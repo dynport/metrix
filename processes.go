@@ -39,39 +39,6 @@ func (self *Processes) Prefix() string {
 	return "processes"
 }
 
-func (self *Processes) Keys() []string {
-	return []string{
-		"Pid",
-		"Ppid",
-		"Pgrp",
-		"Session",
-		"TtyNr",
-		"Tpgid",
-		"Flags",
-		"Minflt",
-		"Cminflt",
-		"Majflt",
-		"Cmajflt",
-		"Utime",
-		"Stime",
-		"Cutime",
-		"Sctime",
-		"Priority",
-		"Nice",
-		"NumThreads",
-		"Itrealvalue",
-		"Starttime",
-		"Vsize",
-		"RSS",
-		"RSSlim",
-		"Startcode",
-		"Endcode",
-		"Startstac",
-		"GuestTime",
-		"CguestTime",
-	}
-}
-
 var matchBrackets = regexp.MustCompile("(^\\(|\\)$)")
 
 func NormalizeProcessName(comm string) string {
@@ -82,7 +49,7 @@ func NormalizeProcessName(comm string) string {
 var matchNums = regexp.MustCompile("[0-9]+")
 
 func generateProcfiles() (matches chan string, e error) {
-	procmount := ProcRoot()  + "/proc"
+	procmount := ProcRoot() + "/proc"
 	d, e := os.Open(procmount)
 	if e != nil {
 		return nil, e

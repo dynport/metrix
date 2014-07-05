@@ -59,39 +59,6 @@ func (self *PgBouncer) Collect(c *MetricsCollection) (e error) {
 	return
 }
 
-func (self *PgBouncer) Keys() []string {
-	return []string{
-		"connections.Total",
-		"memory.Free",
-		"memory.MemTotal",
-		"memory.Size",
-		"memory.Used",
-		"pools.ClientsActive",
-		"pools.ClientsWaiting",
-		"pools.MaxWait",
-		"pools.ServersActive",
-		"pools.ServersIdle",
-		"pools.ServersLogin",
-		"pools.ServersTested",
-		"pools.ServersUsed",
-		"sockets.PktAvail",
-		"sockets.PktPos",
-		"sockets.PktRemain",
-		"sockets.RecvPos",
-		"sockets.SendAvail",
-		"sockets.SendPos",
-		"sockets.SendRemain",
-		"stats.AvgQuery",
-		"stats.AvgRecv",
-		"stats.AvgReq",
-		"stats.AvgSent",
-		"stats.TotalQueryTime",
-		"stats.TotalReceived",
-		"stats.TotalRequests",
-		"stats.TotalSent",
-	}
-}
-
 func (self *PgBouncer) Prefix() string {
 	return "pgbouncer"
 }

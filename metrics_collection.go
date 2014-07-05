@@ -1,14 +1,10 @@
 package main
 
-import (
-	"errors"
-	"fmt"
-	"strconv"
-)
+import "strconv"
 
 type MetricsCollection struct {
 	Prefix  string
-	Metrics []*Metric
+	Metrics Metrics
 	Mapping map[string]string
 }
 
@@ -31,11 +27,9 @@ func (m *MetricsCollection) AddMapping(from, to string) {
 
 func (m *MetricsCollection) AddWithTags(key string, v int64, tags map[string]string) (e error) {
 	if realKey, ok := m.Mapping[key]; ok {
-		m.Metrics = append(m.Metrics, &Metric{Key: m.Prefix + "." + realKey, Value: v, Tags: tags})
-	} else {
-		e = errors.New("no mapping defined for " + key)
-		fmt.Println("ERROR", e.Error())
+		key = realKey
 	}
+	m.Metrics = append(m.Metrics, &Metric{Key: m.Prefix + "." + key, Value: v, Tags: tags})
 	return
 }
 

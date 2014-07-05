@@ -85,29 +85,3 @@ func (self *Net) Collect(c *MetricsCollection) (e error) {
 	}
 	return
 }
-
-func (self *Net) Keys() []string {
-	return []string{
-		"ip.TotalPacketsReceived",
-		"ip.Forwarded",
-		"ip.IncomingPacketsDiscarded",
-		"ip.IncomingPacketsDelivered",
-		"ip.RequestsSentOut",
-		"tcp.ActiveConnectionsOpenings",
-		"tcp.PassiveConnectionsOpenings",
-		"tcp.FailedConnectionAttempts",
-		"tcp.ConnectionResetsReceived",
-		"tcp.ConnectionsEstablished",
-		"tcp.SegmentsReceived",
-		"tcp.SegmentsSendOut",
-		"tcp.SegmentsTransmitted",
-		"tcp.BadSegmentsReceived",
-		"tcp.ResetsSent",
-		"udp.PacketsReceived",
-		"udp.PacketsToUnknownPortRecived",
-		"udp.PacketReceiveErrors",
-		"udp.PacketsSent",
-		"ip.InOctets",
-		"ip.OutOctets",
-	}
-}

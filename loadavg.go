@@ -14,14 +14,6 @@ func init() {
 type LoadAvg struct {
 }
 
-func (l *LoadAvg) Keys() []string {
-	return []string{
-		"Load1m",
-		"Load5m",
-		"Load15m",
-	}
-}
-
 func (l *LoadAvg) Prefix() string {
 	return "load"
 }

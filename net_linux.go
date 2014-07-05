@@ -13,27 +13,27 @@ func init() {
 }
 
 var mapStatMapping = map[string]string{
-	"Ip.InReceives":            "ip.TotalPacketsReceived",
-	"Ip.ForwDatagrams":                         "ip.Forwarded",
-	"Ip.InDiscards":        "ip.IncomingPacketsDiscarded",
-	"Ip.InDelivers":        "ip.IncomingPacketsDelivered",
-	"Ip.OutRequests":                 "ip.RequestsSentOut",
-	"Tcp.ActiveOpens":       "tcp.ActiveConnectionsOpenings",
-	"Tcp.PassiveOpens":       "tcp.PassiveConnectionsOpenings",
-	"Tcp.AttemptFails":        "tcp.FailedConnectionAttempts",
-	"Tcp.EstabResets":        "tcp.ConnectionResetsReceived",
-	"Tcp.CurrEstab":           "tcp.ConnectionsEstablished",
-	"Tcp.InSegs":                 "tcp.SegmentsReceived",
-	"Tcp.OutSegs":                 "tcp.SegmentsSendOut",
-	"Tcp.RetransSegs":             "tcp.SegmentsTransmitted",
-	"Tcp.InErrs":            "tcp.BadSegmentsReceived",
-	"Tcp.OutRsts":                       "tcp.ResetsSent",
-	"Udp.InDatagrams":                  "udp.PacketsReceived",
-	"Udp.NoPorts.": "udp.PacketsToUnknownPortRecived",
-	"Udp.InErrors":             "udp.PacketReceiveErrors",
-	"Udp.OutDatagrams":                      "udp.PacketsSent",
-	"IpExt.InOctets": "ip.InOctets",
-	"IpExt.OutOctets": "ip.OutOctets",
+	"Ip.InReceives":    "ip.TotalPacketsReceived",
+	"Ip.ForwDatagrams": "ip.Forwarded",
+	"Ip.InDiscards":    "ip.IncomingPacketsDiscarded",
+	"Ip.InDelivers":    "ip.IncomingPacketsDelivered",
+	"Ip.OutRequests":   "ip.RequestsSentOut",
+	"Tcp.ActiveOpens":  "tcp.ActiveConnectionsOpenings",
+	"Tcp.PassiveOpens": "tcp.PassiveConnectionsOpenings",
+	"Tcp.AttemptFails": "tcp.FailedConnectionAttempts",
+	"Tcp.EstabResets":  "tcp.ConnectionResetsReceived",
+	"Tcp.CurrEstab":    "tcp.ConnectionsEstablished",
+	"Tcp.InSegs":       "tcp.SegmentsReceived",
+	"Tcp.OutSegs":      "tcp.SegmentsSendOut",
+	"Tcp.RetransSegs":  "tcp.SegmentsTransmitted",
+	"Tcp.InErrs":       "tcp.BadSegmentsReceived",
+	"Tcp.OutRsts":      "tcp.ResetsSent",
+	"Udp.InDatagrams":  "udp.PacketsReceived",
+	"Udp.NoPorts.":     "udp.PacketsToUnknownPortRecived",
+	"Udp.InErrors":     "udp.PacketReceiveErrors",
+	"Udp.OutDatagrams": "udp.PacketsSent",
+	"IpExt.InOctets":   "ip.InOctets",
+	"IpExt.OutOctets":  "ip.OutOctets",
 }
 
 type Net struct {
@@ -83,7 +83,7 @@ func (self *Net) collect2LineFile(c *MetricsCollection, name string) (e error) {
 	}
 	raw := string(b)
 	lines := strings.Split(raw, "\n")
-	for i := 0; i < len(lines) - 1; i+=2 {
+	for i := 0; i < len(lines)-1; i += 2 {
 		for k, v := range parse2lines(lines[i], lines[i+1]) {
 			if mapped, ok := mapStatMapping[k]; ok {
 				c.Add(mapped, v)
@@ -100,30 +100,4 @@ func (self *Net) Collect(c *MetricsCollection) error {
 		}
 	}
 	return nil
-}
-
-func (self *Net) Keys() []string {
-	return []string{
-		"ip.TotalPacketsReceived",
-		"ip.Forwarded",
-		"ip.IncomingPacketsDiscarded",
-		"ip.IncomingPacketsDelivered",
-		"ip.RequestsSentOut",
-		"tcp.ActiveConnectionsOpenings",
-		"tcp.PassiveConnectionsOpenings",
-		"tcp.FailedConnectionAttempts",
-		"tcp.ConnectionResetsReceived",
-		"tcp.ConnectionsEstablished",
-		"tcp.SegmentsReceived",
-		"tcp.SegmentsSendOut",
-		"tcp.SegmentsTransmitted",
-		"tcp.BadSegmentsReceived",
-		"tcp.ResetsSent",
-		"udp.PacketsReceived",
-		"udp.PacketsToUnknownPortRecived",
-		"udp.PacketReceiveErrors",
-		"udp.PacketsSent",
-		"ip.InOctets",
-		"ip.OutOctets",
-	}
 }

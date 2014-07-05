@@ -1,9 +1,6 @@
 package main
 
-import (
-	"fmt"
-	"os"
-)
+import "os"
 
 type Config struct {
 	OpenTSDBUrl string `json:"opentsdb_url"`
@@ -80,17 +77,6 @@ func main() {
 	if parser.Get(HELP) == "true" || len(parser.Values) == 0 {
 		parser.PrintDefaults()
 		os.Exit(0)
-	}
-
-	if parser.Get(KEYS) == "true" {
-		for k, _ := range parser.Values {
-			if col, ok := collectors[k]; ok {
-				for _, m := range mh.Keys(col) {
-					fmt.Println(m)
-				}
-			}
-		}
-		return
 	}
 
 	for key, _ := range parser.Values {

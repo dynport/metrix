@@ -29,22 +29,6 @@ var diskStatFields = map[int]string{
 type Disk struct {
 }
 
-func (self *Disk) Keys() []string {
-	return []string{
-		"ReadsCompleted",
-		"ReadsMerged",
-		"SectorsRead",
-		"MillisecondsRead",
-		"WritesCompleted",
-		"WritesMerged",
-		"SectorsWritten",
-		"MillisecondsWritten",
-		"IosInProgress",
-		"MillisecondsIO",
-		"WeightedMillisecondsIO",
-	}
-}
-
 func (self *Disk) Prefix() string {
 	return "disk"
 }

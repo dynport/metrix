@@ -104,18 +104,6 @@ func (self *Nginx) Prefix() string {
 	return "nginx"
 }
 
-func (self *Nginx) Keys() []string {
-	return []string{
-		"ActiveConnections",
-		"Accepts",
-		"Handled",
-		"Requests",
-		"Reading",
-		"Writing",
-		"Waiting",
-	}
-}
-
 func (nginx *Nginx) Collect(c *MetricsCollection) error {
 	var e error
 	if len(nginx.Raw) == 0 {

@@ -140,31 +140,6 @@ type RiakStatus struct {
 	RingMembers    []string `json:"ring_members"`
 }
 
-func (self *Riak) Keys() []string {
-	return []string{
-		"VNodeGets", "VNodeGets", "VNodeGetsTotal", "VNodePuts", "VNodePutsTotal", "VNodeIndexReads", "VNodeIndexReadsTotal", "VNodeIndexWrites",
-		"VNodeIndexWritesTotal", "VNodeIndexWritesPostings", "VNodeIndexWritesPostings_total", "VNodeIndexDeletes", "VNodeIndexDeletes_total",
-		"VNodeIndexDeletes_postings", "VNodeIndexDeletes_postings_total", "NodeGets", "NodeGetsTotal", "NodeGet_fsm_siblings_mean", "NodegetFsmSiblingsMedian",
-		"NodegetFsmSiblings95", "NodegetFsmSiblings99", "NodegetFsmSiblings100", "NodegetFsmObjsizeMean", "NodegetFsmObjsizeMedian", "NodegetFsmObjsize95",
-		"NodegetFsmObjsize99", "NodegetFsmObjsize100", "NodegetFsmTimeMean", "NodegetFsmTimeMedian", "NodegetFsmTime95", "NodegetFsmTime99",
-		"NodegetFsmTime100", "NodePuts", "NodePutsTotal", "NodePutFsmTimeMean", "NodePutFsmTimeMedian", "Node_put_fsm_time_95", "Node_put_fsm_time_99",
-		"Node_put_fsm_time_100", "ReadRepairs", "ReadRepairsTotal", "CoordRedirsTotal", "ExecutingMappers", "PrecommitFail", "PostcommitFail", "PbcActive",
-		"PbcConnects", "PbcConnectsTotal", "NodeGetFsmActive", "NodeGetFsmActive60s", "NodeGetFsmInRate", "NodeGetFsmOutRate", "NodeGetFsmRejected",
-		"NodeGetFsmRejected60s", "NodeGetFsmRejectedTotal", "NodePutFsmActive", "NodePutFsmActive60s", "NodePutFsmInRate", "NodePutFsmOutRate",
-		"NodePutFsmRejected", "NodePutFsmRejected60s", "NodePutFsmRejectedTotal", "ReadRepairsPrimaryOutofdateOne", "ReadRepairsPrimaryOutofdateCount",
-		"ReadRepairsPrimaryNotfoundOne", "ReadRepairsPrimaryNotfoundCount", "ReadRepairsFallbackOutofdateOne", "ReadRepairsFallbackOutofdateCount",
-		"ReadRepairsFallbackNotfoundOne", "ReadRepairsFallbackNotfoundCount", "PipelineActive", "PipelineCreateCount", "PipelineCreateOne",
-		"PipelineCreateErrorCount", "PipelineCreateErrorOne", "CpuNprocs", "CpuAvg1", "CpuAvg5", "CpuAvg15", "MemTotal", "MemAllocated", "SysGlobalHeapsSize",
-		"SysProcessCount", "SysThreadPoolSize", "SysWordsize", "RingNumPartitions", "RingCreationSize", "MemoryTotal", "MemoryProcesses",
-		"MemoryProcessesUsed", "MemorySystem", "MemoryAtom", "MemoryAtomUsed", "MemoryBinary", "MemoryCode", "MemoryEts", "RiakCoreStatTs",
-		"IgnoredGossipTotal", "RingsReconciledTotal", "RingsReconciled", "GossipReceived", "RejectedHandoffs", "HandoffTimeouts", "DroppedVnodeRequestsTotal",
-		"ConvergeDelayMin", "ConvergeDelayMax", "ConvergeDelayMean", "ConvergeDelayLast", "RebalanceDelayMin", "RebalanceDelayMax", "RebalanceDelayMean",
-		"RebalanceDelayLast", "RiakKvVnodesRunning", "RiakKvVnodeqMin", "RiakKvVnodeqMedian", "RiakKvVnodeqMean", "RiakKvVnodeqMax", "RiakKvVnodeqTotal",
-		"RiakPipeVnodesRunning", "RiakPipeVnodeqMin", "RiakPipeVnodeqMedian", "RiakPipeVnodeqMean", "RiakPipeVnodeqMax", "RiakPipeVnodeqTotal",
-		"ConnectedNodesCount", "RingMembersCount",
-	}
-}
-
 func (self *Riak) Prefix() string {
 	return "riak"
 }

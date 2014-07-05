@@ -11,7 +11,6 @@ func TestFiles(t *testing.T) {
 		files := &Files{RawStatus: readFile("fixtures/lsof.txt")}
 
 		So(files.Prefix(), ShouldEqual, "files")
-		So(len(files.Keys()), ShouldNotEqual, 0)
 
 		mh := new(MetricHandler)
 		stats, _ := mh.Collect(files)

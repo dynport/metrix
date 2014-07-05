@@ -21,34 +21,6 @@ func (self *Redis) Prefix() string {
 	return "redis"
 }
 
-func (self *Redis) Keys() []string {
-	return []string{
-		"UptimeInSeconds",
-		"memory.UsedMemory",
-		"memory.UsedMemoryRSS",
-		"memory.UsedMemoryPeak",
-		"memory.UsedMemoryLua",
-		"clients.ConnectedClients",
-		"clients.ClientLongestOutputList",
-		"clients.ClientBiggestInputBuf",
-		"clients.BlockedClients",
-		"stats.TotalConnectionsReceived",
-		"stats.TotalCommandsProcessed",
-		"stats.InstantaneousOpsPerSec",
-		"stats.RejectedConnections",
-		"stats.ExpiredKeys",
-		"stats.EvictedKeys",
-		"stats.KeyspaceHits",
-		"stats.KeyspaceMisses",
-		"stats.PubsubChannels",
-		"stats.PubsubPatterns",
-		"stats.LatestForkUsec",
-		"replication.ConnectedSlaves",
-		"db.Keys",
-		"db.Expires",
-	}
-}
-
 var logger = &Logger{Prefix: "redis"}
 
 func (self *Redis) Collect(c *MetricsCollection) (e error) {

@@ -19,31 +19,6 @@ func (es *ElasticSearch) Prefix() string {
 	return "elasticsearch"
 }
 
-func (es *ElasticSearch) Keys() []string {
-	return []string{
-		"shards.Total",
-		"shards.Successful",
-		"shards.Failed",
-		"indices.index.SizeInBytes",
-		"indices.index.PrimarySizeInBytes",
-		"indices.translog.Operations",
-		"indices.docs.NumDocs",
-		"indices.docs.MaxDoc",
-		"indices.docs.DeletedDocs",
-		"indices.merges.Current",
-		"indices.merges.CurrentDocs",
-		"indices.merges.CurrentSizeInBytes",
-		"indices.merges.Total",
-		"indices.merges.TotalTimeInMillis",
-		"indices.merges.TotalDocs",
-		"indices.merges.TotalSizeInBytes",
-		"indices.refresh.Total",
-		"indices.refresh.TotalTimeInMillis",
-		"indices.flush.Total",
-		"indices.flush.TotalTimeInMillis",
-	}
-}
-
 func (es *ElasticSearch) Collect(c *MetricsCollection) (e error) {
 	b, e := es.ReadStatus()
 	if e != nil {

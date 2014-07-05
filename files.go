@@ -53,10 +53,6 @@ func (f *Files) Collect(col *MetricsCollection) error {
 	return nil
 }
 
-func (f *Files) Keys() []string {
-	return []string{FILES_OPEN}
-}
-
 func (f *Files) Prefix() string {
 	return FILES
 }

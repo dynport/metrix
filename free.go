@@ -66,16 +66,3 @@ func (free *Free) Collect(c *MetricsCollection) error {
 func (free *Free) Prefix() string {
 	return "free"
 }
-
-func (free *Free) Keys() []string {
-	return []string{
-		FREE_MEM_TOTAL,
-		FREE_MEM_USED,
-		FREE_MEM_FREE,
-		FREE_MEM_BUFFERS,
-		FREE_MEM_CACHED,
-		FREE_SWAP_TOTAL,
-		FREE_SWAP_USED,
-		FREE_SWAP_FREE,
-	}
-}

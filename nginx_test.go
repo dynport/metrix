@@ -1,6 +1,7 @@
 package main
 
 import (
+	"sort"
 	"testing"
 
 	. "github.com/smartystreets/goconvey/convey"
@@ -13,19 +14,16 @@ func TestParseNginx(t *testing.T) {
 		nginx := &Nginx{Raw: readFile("fixtures/nginx.status")}
 
 		all, e := mh.Collect(nginx)
+		sort.Sort(all)
 		So(e, ShouldBeNil)
-
-		for _, m := range all {
-			t.Logf("%s: %v", m.Key, m.Value)
-		}
 
 		So(len(all), ShouldEqual, 7)
 
-		So(all[0].Key, ShouldEqual, "nginx.ActiveConnections")
-		So(all[0].Value, ShouldEqual, 10)
+		So(all[1].Key, ShouldEqual, "nginx.ActiveConnections")
+		So(all[1].Value, ShouldEqual, 10)
 
-		So(all[6].Key, ShouldEqual, "nginx.Waiting")
-		So(all[6].Value, ShouldEqual, 70)
+		So(all[5].Key, ShouldEqual, "nginx.Waiting")
+		So(all[5].Value, ShouldEqual, 70)
 
 	})
 }

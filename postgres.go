@@ -4,11 +4,12 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	_ "github.com/lib/pq"
 	"net/url"
 	"strconv"
 	"strings"
 	"time"
+
+	_ "github.com/lib/pq"
 )
 
 const POSTGRES = "postgres"
@@ -71,17 +72,6 @@ type PostgreSQLStats struct {
 	Uri string
 	DB  *sql.DB
 	*PostgresURL
-}
-
-func (self *PostgreSQLStats) Keys() []string {
-	return []string{
-		"StatActivity", "tables.SeqScan", "tables.SeqTupRead", "tables.IdxScan", "tables.IdxTupFetch", "tables.NTupIns", "tables.NTupUpd", "tables.NTupDel",
-		"tables.NTupHotUpd", "tables.NLiveTup", "tables.NDeadTup", "tables.VacuumCount", "tables.AutoVacuumAcount", "tables.AnalyzeCount",
-		"tables.AutoAnalyzeCount", "databases.NumBackends", "databases.XactCommit", "databases.XactRollback", "databases.BlksRead", "databases.BlksHit",
-		"databases.TupReturned", "databases.TupFetched", "databases.TupInserted", "databases.TupUpdated", "databases.TupDeleted", "databases.Conflicts",
-		"databases.TempFiles", "databases.TempBytes", "databases.Deadlocks", "databases.BlkReadTime", "databases.BlkWriteTime", "indexes.IdxScan",
-		"indexes.IdxTupRead", "indexes.IdxTupFetch",
-	}
 }
 
 func (self *PostgreSQLStats) Prefix() string {

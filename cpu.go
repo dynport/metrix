@@ -39,23 +39,6 @@ func (*Cpu) Prefix() string {
 	return "cpu"
 }
 
-func (*Cpu) Keys() []string {
-	return []string{
-		"Ctxt",
-		"Btime",
-		"Processes",
-		"ProcsRunning",
-		"ProcsBlocked",
-		"User",
-		"Nice",
-		"System",
-		"Idle",
-		"IOWait",
-		"IRC",
-		"SoftIRQ",
-	}
-}
-
 func ProcRoot() string {
 	return os.Getenv("PROC_ROOT")
 }
