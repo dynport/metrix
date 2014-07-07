@@ -21,13 +21,11 @@ func (self *Redis) Prefix() string {
 	return "redis"
 }
 
-var logger = &Logger{Prefix: "redis"}
-
 func (self *Redis) Collect(c *MetricsCollection) (e error) {
-	logger.Info("collecting redis")
+	logger.Printf("collecting redis")
 	b, e := self.ReadInfo()
 	if e != nil {
-		logger.Error("reading info", e.Error())
+		logger.Printf("ERROR reading info: %q", e.Error())
 		return
 	}
 	str := string(b)
@@ -88,10 +86,10 @@ func (self *Redis) Collect(c *MetricsCollection) (e error) {
 func (self *Redis) ReadInfo() (b []byte, e error) {
 	if len(self.Raw) == 0 {
 		var con net.Conn
-		logger.Info("connecting", self.Address)
+		logger.Printf("connecting %s", self.Address)
 		con, e = net.Dial("tcp", self.Address)
 		if e != nil {
-			logger.Error("connecting", self.Address, e.Error())
+			logger.Printf("ERROR connecting %s: %q", self.Address, e.Error())
 			return
 		}
 		defer con.Close()
@@ -100,9 +98,9 @@ func (self *Redis) ReadInfo() (b []byte, e error) {
 		b = make([]byte, 4096)
 		var i int
 		i, e = con.Read(b)
-		logger.Finfo("read %d bytes", i)
+		dbg.Printf("read %d bytes", i)
 		if e != nil {
-			logger.Error("reading", e.Error())
+			logger.Printf("ERROR reading: %q", e.Error())
 			return
 		}
 		self.Raw = b

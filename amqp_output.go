@@ -3,8 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/streadway/amqp"
 	"time"
+
+	"github.com/streadway/amqp"
 )
 
 const AMQP_EXCHANGE = "metrix"
@@ -29,7 +30,7 @@ func PublishMetricsWithAMQP(address string, metrics []*Metric, hostname string) 
 		amqpKey := hostname + "." + m.Key
 		b, e := json.Marshal(m)
 		if e != nil {
-			logger.Error(e.Error())
+			logger.Printf(e.Error())
 			continue
 		}
 		e = channel.Publish(AMQP_EXCHANGE, amqpKey, false, false, amqp.Publishing{
@@ -38,7 +39,7 @@ func PublishMetricsWithAMQP(address string, metrics []*Metric, hostname string) 
 			Timestamp:   time.Now(),
 		})
 		if e != nil {
-			logger.Error("error publishing " + e.Error())
+			logger.Printf("ERROR: error publishing " + e.Error())
 		}
 	}
 	fmt.Printf("sent %d metrics in %.06f\n", len(metrics), time.Now().Sub(started).Seconds())

@@ -38,14 +38,8 @@ func init() {
 }
 
 func main() {
-	if os.Getenv("DEBUG") == "true" {
-		logger.LogLevel = DEBUG
-	} else {
-		logger.LogLevel = WARN
-	}
-
 	if e := parser.ProcessAll(os.Args[1:]); e != nil {
-		logger.Error(e.Error())
+		logError(e)
 		os.Exit(1)
 	}
 
@@ -82,7 +76,7 @@ func main() {
 	for key, _ := range parser.Values {
 		if collector, ok := collectors[key]; ok {
 			if e := processCollector(mh, output, collector); e != nil {
-				logger.Error("processong collector", key, e.Error())
+				logger.Print("ERROR: processong collector", key, e.Error())
 			}
 		} else {
 			isOutput := false
@@ -93,7 +87,7 @@ func main() {
 				}
 			}
 			if !isOutput {
-				logger.Error("ERROR: no collector found for " + key)
+				logger.Printf("ERROR: no collector found for %q", key)
 			}
 		}
 	}

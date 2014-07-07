@@ -9,7 +9,6 @@ import (
 
 func TestParseNginx(t *testing.T) {
 	Convey("Nginx", t, func() {
-		logger.LogLevel = INFO
 		mh := &MetricHandler{}
 		nginx := &Nginx{Raw: readFile("fixtures/nginx.status")}
 

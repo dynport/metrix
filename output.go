@@ -36,7 +36,7 @@ func (o *OutputHandler) WriteMetrics(all []*Metric) (e error) {
 	if o.AmqpAddress != "" {
 		e = PublishMetricsWithAMQP(o.AmqpAddress, all, o.Hostname)
 		if e != nil {
-			logger.Error("ERROR: " + e.Error())
+			logger.Printf("ERROR: %q", e)
 		} else {
 			sent = true
 		}

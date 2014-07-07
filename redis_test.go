@@ -8,7 +8,6 @@ import (
 
 func TestParseRedis(t *testing.T) {
 	Convey("Redis", t, func() {
-		logger.LogLevel = WARN
 		mh := &MetricHandler{}
 		es := &Redis{Raw: readFile("fixtures/redis_info.txt")}
 

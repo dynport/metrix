@@ -77,7 +77,7 @@ func (self *Df) Collect(c *MetricsCollection) (e error) {
 }
 
 func ReadDf(flag string) (b []byte, e error) {
-	logger.Debug("reading df with", flag)
+	dbg.Printf("reading df with", flag)
 	b, e = exec.Command("df", flag).Output()
 	if e != nil {
 		return
