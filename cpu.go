@@ -1,9 +1,10 @@
 package main
 
 import (
+	"bufio"
+	"bytes"
 	"io/ioutil"
 	"os"
-	"regexp"
 	"strconv"
 	"strings"
 )
@@ -15,6 +16,19 @@ var statMapping = map[string]string{
 	"procs_running": "ProcsRunning",
 	"procs_blocked": "ProcsBlocked",
 }
+
+const (
+	cpuFieldUser = iota + 1
+	cpuFieldNice
+	cpuFieldSystem
+	cpuFieldIdle
+	cpuFieldIOWait
+	cpuFieldIrq
+	cpuFieldSoftIrq
+	cpuFieldSteal
+	cpuFieldGuest
+	cpuFieldGuestNice
+)
 
 var cpuLineMapping = map[int]string{
 	1: "User",
@@ -33,6 +47,101 @@ func init() {
 }
 
 type Cpu struct {
+	Cpus         []*CpuStat
+	Ctxt         int64
+	Btime        int64
+	Processes    int64
+	ProcsRunning int64
+	ProcsBlocked int64
+}
+
+func (c *Cpu) Load(b []byte) error {
+	scanner := bufio.NewScanner(bytes.NewReader(b))
+	c.Cpus = []*CpuStat{}
+	for scanner.Scan() {
+		line := scanner.Text()
+		parts := strings.Fields(line)
+		if len(parts) < 2 {
+			// continue
+		}
+		key := parts[0]
+		if strings.HasPrefix(key, "cpu") {
+			s := &CpuStat{Id: strings.TrimPrefix(key, "cpu")}
+			for i, v := range parts[1:] {
+				value, e := strconv.ParseInt(v, 10, 64)
+				if e != nil {
+					return e
+				}
+				switch i + 1 {
+				case cpuFieldUser:
+					s.User = value
+				case cpuFieldNice:
+					s.Nice = value
+				case cpuFieldSystem:
+					s.System = value
+				case cpuFieldIdle:
+					s.Idle = value
+				case cpuFieldIOWait:
+					s.IOWait = value
+				case cpuFieldIrq:
+					s.IRQ = value
+				case cpuFieldSoftIrq:
+					s.SoftIRQ = value
+				case cpuFieldSteal:
+					s.Steal = value
+				case cpuFieldGuest:
+					s.Guest = value
+				case cpuFieldGuestNice:
+					s.GuestNice = value
+				}
+			}
+			c.Cpus = append(c.Cpus, s)
+		} else {
+			var e error
+			switch key {
+			case "ctxt":
+				c.Ctxt, e = parseIntE(parts[1])
+				if e != nil {
+					return e
+				}
+			case "btime":
+				c.Btime, e = parseIntE(parts[1])
+				if e != nil {
+					return e
+				}
+			case "processes":
+				c.Processes, e = parseIntE(parts[1])
+				if e != nil {
+					return e
+				}
+			case "procs_running":
+				c.ProcsRunning, e = parseIntE(parts[1])
+				if e != nil {
+					return e
+				}
+			case "procs_blocked":
+				c.ProcsBlocked, e = parseIntE(parts[1])
+				if e != nil {
+					return e
+				}
+			}
+		}
+	}
+	return scanner.Err()
+}
+
+type CpuStat struct {
+	Id        string
+	User      int64
+	Nice      int64
+	System    int64
+	Idle      int64
+	IOWait    int64
+	IRQ       int64
+	SoftIRQ   int64
+	Steal     int64
+	Guest     int64
+	GuestNice int64
 }
 
 func (*Cpu) Prefix() string {
@@ -52,38 +161,44 @@ func ReadProcFile(path string) (r string) {
 
 func (cpu *Cpu) Collect(c *MetricsCollection) (e error) {
 	str := ReadProcFile("stat")
-	for _, line := range strings.Split(str, "\n") {
-		chunks := strings.Split(line, " ")
-		if strings.HasPrefix(chunks[0], "cpu") {
-			cpu.CollectCpu(c, line)
-			continue
-		}
-		if k, ok := statMapping[chunks[0]]; ok {
-			if v, e := strconv.ParseInt(chunks[1], 10, 64); e == nil {
-				c.Add(k, v)
-			}
-		}
+	e = cpu.Load([]byte(str))
+	if e != nil {
+		return e
 	}
-	return
-}
 
-func (cpu *Cpu) CollectCpu(c *MetricsCollection, line string) (metrics []*Metric) {
-	chunks := strings.Fields(line)
-
-	re := regexp.MustCompile("^cpu(\\d+)")
-	mets := re.FindStringSubmatch(chunks[0])
-	tags := make(map[string]string)
-	if len(mets) == 2 {
-		tags["cpu_id"] = mets[1]
-	} else {
-		tags["total"] = "true"
+	values := map[string]int64{
+		"ctxt":          cpu.Ctxt,
+		"btime":         cpu.Btime,
+		"processes":     cpu.Processes,
+		"procs_running": cpu.ProcsRunning,
+		"procs_blocked": cpu.ProcsBlocked,
 	}
-	for i, v := range chunks {
-		if k, ok := cpuLineMapping[i]; ok {
-			if i, e := strconv.ParseInt(v, 10, 64); e == nil {
-				c.AddWithTags(k, i, tags)
-			}
+	for k, v := range values {
+		c.Add(k, v)
+	}
+
+	for _, cpu := range cpu.Cpus {
+		tags := map[string]string{}
+		if cpu.Id != "" {
+			tags["cpu_id"] = cpu.Id
+		} else {
+			tags["total"] = "true"
+		}
+		values := map[string]int64{
+			"user":       cpu.User,
+			"nice":       cpu.Nice,
+			"system":     cpu.System,
+			"idle":       cpu.Idle,
+			"io_wait":    cpu.IOWait,
+			"irq":        cpu.IRQ,
+			"soft_irq":   cpu.SoftIRQ,
+			"steal":      cpu.Steal,
+			"guest":      cpu.Guest,
+			"guest_nice": cpu.GuestNice,
+		}
+		for k, v := range values {
+			c.AddWithTags(k, v, tags)
 		}
 	}
-	return
+	return nil
 }
