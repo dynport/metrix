@@ -4,8 +4,6 @@ import (
 	"bufio"
 	"io"
 	"sort"
-
-	"github.com/dynport/dgtk/stats"
 )
 
 type OpenFiles struct {
@@ -86,7 +84,7 @@ var fileMapping = map[string]int{
 
 func (r *OpenFiles) Load(in io.Reader) error {
 	scanner := bufio.NewScanner(in)
-	stats := stats.Map{}
+	stats := Map{}
 	var f *File
 	for scanner.Scan() {
 		line := scanner.Text()
