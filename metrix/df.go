@@ -3,6 +3,8 @@ package metrix
 import (
 	"bufio"
 	"io"
+
+	"os/exec"
 	"strconv"
 	"strings"
 )
@@ -14,6 +16,20 @@ type Disk struct {
 	Available  int64
 	Use        int
 	MountedOn  string
+}
+
+func Disks() ([]*Disk, error) {
+	c := exec.Command("df", "-k")
+	out, e := c.StdoutPipe()
+	if e != nil {
+		return nil, e
+	}
+	defer out.Close()
+	e = c.Start()
+	if e != nil {
+		return nil, e
+	}
+	return ParseDf(out)
 }
 
 const (
@@ -30,11 +46,12 @@ func ParseDf(in io.Reader) ([]*Disk, error) {
 	disks := []*Disk{}
 	for scanner.Scan() {
 		fields := strings.Fields(scanner.Text())
-		if len(fields) != 6 {
-			continue
-		}
 		if fields[0] == "Filesystem" {
 			// header
+			continue
+		}
+		if len(fields) != 6 {
+			dbg.Printf("expected 6 fields, got %d", len(fields))
 			continue
 		}
 		d := &Disk{}
