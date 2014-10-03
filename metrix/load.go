@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -16,7 +17,7 @@ const (
 	fieldLoadMostRecentPid
 )
 
-type LoadAVG struct {
+type LoadAvg struct {
 	Min1             float64
 	Min5             float64
 	Min15            float64
@@ -25,7 +26,17 @@ type LoadAVG struct {
 	MostRecentPid    int
 }
 
-func (l *LoadAVG) Load(in io.Reader) error {
+func LoadLoadAvg() (*LoadAvg, error) {
+	f, e := os.Open("/proc/loadavg")
+	if e != nil {
+		return nil, e
+	}
+	defer f.Close()
+	l := &LoadAvg{}
+	return l, l.Load(f)
+}
+
+func (l *LoadAvg) Load(in io.Reader) error {
 	b, e := ioutil.ReadAll(in)
 	if e != nil {
 		return e

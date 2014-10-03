@@ -13,7 +13,7 @@ func TestLoadAVG(t *testing.T) {
 		So(e, ShouldBeNil)
 		defer f.Close()
 
-		l := &LoadAVG{}
+		l := &LoadAvg{}
 		e = l.Load(f)
 		So(e, ShouldBeNil)
 		So(l.Min1, ShouldEqual, 0.00)
