@@ -3,34 +3,30 @@ package metrix
 import (
 	"os"
 	"testing"
-
-	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestOpenFiles(t *testing.T) {
-	Convey("Load", t, func() {
-		f, e := os.Open("fixtures/lsof.txt")
-		So(e, ShouldBeNil)
-		defer f.Close()
+	expect := New(t)
+	f, e := os.Open("fixtures/lsof.txt")
+	expect(e).ToBeNil()
+	defer f.Close()
 
-		files := &OpenFiles{}
-		e = files.Load(f)
-		So(e, ShouldBeNil)
-		So(files.Files, ShouldNotBeNil)
-		So(len(files.Files), ShouldEqual, 265)
+	files := &OpenFiles{}
+	expect(files.Load(f)).ToBeNil()
+	expect(files.Files).ToNotBeNil()
+	expect(files.Files).ToHaveLength(265)
 
-		selectFile := func(pid string) *File {
-			for _, f := range files.Files {
-				if f.ProcessId == pid {
-					return f
-				}
+	selectFile := func(pid string) *File {
+		for _, f := range files.Files {
+			if f.ProcessId == pid {
+				return f
 			}
-			return nil
 		}
+		return nil
+	}
 
-		file := selectFile("1")
-		So(file, ShouldNotBeNil)
-		So(file.FileInodeNumber, ShouldEqual, "6964")
-		So(file.FileName, ShouldEqual, "/dev/ptmx")
-	})
+	file := selectFile("1")
+	expect(file).ToNotBeNil()
+	expect(file.FileInodeNumber).ToEqual("6964")
+	expect(file.FileName).ToEqual("/dev/ptmx")
 }

@@ -3,24 +3,21 @@ package metrix
 import (
 	"os"
 	"testing"
-
-	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestParseDf(t *testing.T) {
-	Convey("ParseDf", t, func() {
-		f, e := os.Open("fixtures/df.txt")
-		So(e, ShouldBeNil)
-		defer f.Close()
+	expect := New(t)
+	f, e := os.Open("fixtures/df.txt")
+	expect(e).ToBeNil()
+	defer f.Close()
 
-		disks, e := ParseDf(f)
-		So(e, ShouldBeNil)
-		So(len(disks), ShouldEqual, 7)
-		So(disks[0].Filesystem, ShouldEqual, "/dev/xvda1")
-		So(disks[0].Blocks, ShouldEqual, 51466360)
-		So(disks[0].Used, ShouldEqual, 32923572)
-		So(disks[0].Available, ShouldEqual, 16346296)
-		So(disks[0].Use, ShouldEqual, 67)
-		So(disks[0].MountedOn, ShouldEqual, "/")
-	})
+	disks, e := ParseDf(f)
+	expect(e).ToBeNil()
+	expect(disks).ToHaveLength(7)
+	expect(disks[0].Filesystem).ToEqual("/dev/xvda1")
+	expect(disks[0].Blocks).ToEqual(51466360)
+	expect(disks[0].Used).ToEqual(32923572)
+	expect(disks[0].Available).ToEqual(16346296)
+	expect(disks[0].Use).ToEqual(67)
+	expect(disks[0].MountedOn).ToEqual("/")
 }

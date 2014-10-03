@@ -3,28 +3,25 @@ package metrix
 import (
 	"os"
 	"testing"
-
-	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestStat(t *testing.T) {
-	Convey("parse", t, func() {
-		f, e := os.Open("fixtures/stat.txt")
-		So(e, ShouldBeNil)
-		defer f.Close()
+	expect := New(t)
+	f, e := os.Open("fixtures/stat.txt")
+	expect(e).ToBeNil()
+	defer f.Close()
 
-		s := &Stat{}
-		e = s.Load(f)
-		So(e, ShouldBeNil)
-		So(s.Cpu, ShouldNotBeNil)
-		So(s.Cpu.User, ShouldEqual, 13586)
-		So(s.Cpu.System, ShouldEqual, 32308)
-		So(s.Cpu.IOWait, ShouldEqual, 762)
-		So(len(s.Cpus), ShouldEqual, 4)
-		So(s.Cpus[0].User, ShouldEqual, 4488)
-		So(s.Cpus[0].System, ShouldEqual, 23009)
-		So(s.BootTime, ShouldEqual, 1412216124)
-		So(s.ContextSwitches, ShouldEqual, 4087538)
-		So(s.Processes, ShouldEqual, 20491)
-	})
+	s := &Stat{}
+	e = s.Load(f)
+	expect(e).ToBeNil()
+	expect(s.Cpu).ToNotBeNil()
+	expect(s.Cpu.User).ToEqual(13586)
+	expect(s.Cpu.System).ToEqual(32308)
+	expect(s.Cpu.IOWait).ToEqual(762)
+	expect(len(s.Cpus)).ToEqual(4)
+	expect(s.Cpus[0].User).ToEqual(4488)
+	expect(s.Cpus[0].System).ToEqual(23009)
+	expect(s.BootTime).ToEqual(1412216124)
+	expect(s.ContextSwitches).ToEqual(4087538)
+	expect(s.Processes).ToEqual(20491)
 }
