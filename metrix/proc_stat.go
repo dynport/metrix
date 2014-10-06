@@ -98,29 +98,29 @@ func LoadProcStat(path string) (*ProcStat, error) {
 }
 
 type ProcStat struct {
-	Pid        int64
-	Comm       string
-	State      string
-	Ppid       int64
-	Pgrp       int64
-	Session    int64
-	TtyNr      int64
-	Tpgid      int64
-	Flags      int64
-	Minflt     int64
-	Cminflt    int64
-	Majflt     int64
-	Cmajflt    int64
-	Utime      int64
-	Stime      int64
-	Cutime     int64
-	Cstime     int64
-	Priority   int64
-	Nice       int64
-	NumThreads int64
-	VSize      int64
-	RSS        int64
-	RSSlim     int64
+	Pid   int64  `json:"pid,omitempty,omitempty"`
+	Comm  string `json:"comm,omitempty,omitempty"`
+	State string `json:"state,omitempty,omitempty"`
+	Ppid  int64  `json:"ppid,omitempty,omitempty"`
+	Pgrp  int64  `json:"pgrp,omitempty,omitempty"`
+	//Session int64 `json:"//session,omitempty"`
+	//TtyNr   int64 `json:"//tty_nr,omitempty"`
+	//Tpgid   int64 `json:"//tpgid,omitempty"`
+	//Flags   int64 `json:"//flags,omitempty"`
+	Minflt  int64 `json:"minflt,omitempty,omitempty"`
+	Cminflt int64 `json:"cminflt,omitempty,omitempty"`
+	Majflt  int64 `json:"majflt,omitempty,omitempty"`
+	Cmajflt int64 `json:"cmajflt,omitempty,omitempty"`
+	Utime   int64 `json:"utime,omitempty,omitempty"`
+	Stime   int64 `json:"stime,omitempty,omitempty"`
+	Cutime  int64 `json:"cutime,omitempty,omitempty"`
+	Cstime  int64 `json:"cstime,omitempty,omitempty"`
+	//Priority   int64 `json:"//priority,omitempty"`
+	//Nice       int64 `json:"//nice,omitempty"`
+	NumThreads int64 `json:"num_threads,omitempty,omitempty"`
+	VSize      int64 `json:"v_size,omitempty,omitempty"`
+	RSS        int64 `json:"rss,omitempty,omitempty"`
+	RSSlim     int64 `json:"rs_slim,omitempty,omitempty"`
 }
 
 func (p *ProcStat) Load(in io.Reader) error {
@@ -146,6 +146,14 @@ func (p *ProcStat) Load(in io.Reader) error {
 				p.Ppid = value
 			case fieldProcStatPgrp:
 				p.Pgrp = value
+			case fieldProcStatMinflt:
+				p.Minflt = value
+			case fieldProcStatCminflt:
+				p.Cminflt = value
+			case fieldProcStatMajflt:
+				p.Majflt = value
+			case fieldProcStatCmajflt:
+				p.Cmajflt = value
 			case fieldProcStatUtime:
 				p.Utime = value
 			case fieldProcStatStime:
