@@ -27,3 +27,11 @@ func TestParseProcStat(t *testing.T) {
 	expect(p.VSize).ToEqual(24223744)
 	expect(p.RSSlim).ToEqual(0)
 }
+
+func TestNumeric(t *testing.T) {
+	expect := New(t)
+	expect(numeric("1234")).ToEqual(true)
+	expect(numeric("1")).ToEqual(true)
+	expect(numeric("")).ToEqual(false)
+	expect(numeric("12a")).ToEqual(false)
+}

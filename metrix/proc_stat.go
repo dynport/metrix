@@ -57,31 +57,35 @@ const (
 	fieldProcStatCguest_time           // %ld (since Linux 2.6.24) (44) Guest time of the process's children, measured in clock ticks
 )
 
-func LoadProcStats() ([]*ProcStat, error) {
-	out := []*ProcStat{}
-	e := filepath.Walk("/proc/", func(p string, info os.FileInfo, e error) error {
-		dbg.Printf("checking file %s", p)
-		if path.Base(p) == "stat" {
-			dbg.Printf("stat file found at %s", p)
-			parts := strings.Split(strings.TrimPrefix(p, "/"), "/")
-			if len(parts) == 3 {
-				f, e := os.Open(p)
-				if e != nil {
-					return e
-				}
-				defer f.Close()
-				p, e := LoadProcStat(p)
-				if e != nil {
-					return e
-				}
-				out = append(out, p)
-			} else {
-				dbg.Printf("parts count is %d, %#v", len(parts), parts)
-			}
+func numeric(s string) bool {
+	if len(s) == 0 {
+		return false
+	}
+	for _, r := range s {
+		if r < '0' || r > '9' {
+			return false
 		}
-		return nil
-	})
-	return out, e
+	}
+	return true
+}
+
+func LoadProcStats() ([]*ProcStat, error) {
+	defer benchmark("load proc stat")()
+	out := []*ProcStat{}
+	files, err := filepath.Glob("/proc/*")
+	if err != nil {
+		return out, err
+	}
+	for _, f := range files {
+		if numeric(path.Base(f)) {
+			p, err := LoadProcStat(f + "/stat")
+			if err != nil {
+				return out, err
+			}
+			out = append(out, p)
+		}
+	}
+	return out, nil
 }
 
 func LoadProcStat(path string) (*ProcStat, error) {
