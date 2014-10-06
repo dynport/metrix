@@ -1,0 +1,24 @@
+ami-id: ami-905e81e7
+ami-launch-index: 0
+ami-manifest-path: (unknown)
+ancestor-ami-ids: unavailable
+availability-zone: eu-west-1a
+block-device-mapping: ami
+ephemeral0
+root
+instance-action: none
+instance-id: i-72d0fa30
+instance-type: m3.xlarge
+local-hostname: ip-172-31-2-96.eu-west-1.compute.internal
+local-ipv4: 172.31.2.96
+kernel-id: aki-52a34525
+mac: unavailable
+profile: default-paravirtual
+product-codes: unavailable
+public-hostname: unavailable
+public-ipv4: 54.72.42.158
+public-keys: ['ssh-rsa somekey rmorgan']
+ramdisk-id: unavailable
+reserveration-id: unavailable
+security-groups: some-security-group
+user-data: unavailable
