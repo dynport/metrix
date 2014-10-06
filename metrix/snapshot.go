@@ -9,13 +9,14 @@ import (
 )
 
 type Snapshot struct {
-	Hostname    string       `json:"hostname,omitempty"`
-	Ec2Metadata *Ec2Metadata `json:"ec2_metadata,omitempty"`
-	Disks       []*Disk      `json:"disks,omitempty"`
-	LoadAvg     *LoadAvg     `json:"load_avg,omitempty"`
-	Meminfo     *Meminfo     `json:"meminfo,omitempty"`
-	ProcStats   []*ProcStat  `json:"proc_stats,omitempty"`
-	Stat        *Stat        `json:"stat,omitempty"`
+	Hostname     string         `json:"hostname,omitempty"`
+	Ec2Metadata  *Ec2Metadata   `json:"ec2_metadata,omitempty"`
+	Disks        []*Disk        `json:"disks,omitempty"`
+	LoadAvg      *LoadAvg       `json:"load_avg,omitempty"`
+	Meminfo      *Meminfo       `json:"meminfo,omitempty"`
+	ProcStats    []*ProcStat    `json:"proc_stats,omitempty"`
+	ProcCmdlines []*ProcCmdline `json:"proc_cmdlines,omitempty"`
+	Stat         *Stat          `json:"stat,omitempty"`
 }
 
 func (s *Snapshot) Load() error {
@@ -25,6 +26,7 @@ func (s *Snapshot) Load() error {
 		s.loadLoadAvg,
 		s.loadMeminfo,
 		s.loadProcStats,
+		s.loadProcCmdlines,
 		s.loadStat,
 	}
 	for _, f := range funcs {
@@ -75,6 +77,11 @@ func (s *Snapshot) loadEc2Metadata() (err error) {
 		s.Ec2Metadata = em
 	}
 	return nil
+}
+
+func (s *Snapshot) loadProcCmdlines() (err error) {
+	s.ProcCmdlines, err = LoadProcCmdlines()
+	return err
 }
 
 func (s *Snapshot) loadProcStats() (err error) {

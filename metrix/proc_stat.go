@@ -69,23 +69,35 @@ func numeric(s string) bool {
 	return true
 }
 
-func LoadProcStats() ([]*ProcStat, error) {
-	defer benchmark("load proc stat")()
-	out := []*ProcStat{}
+func eachProcDir(fun func(p string) error) error {
 	files, err := filepath.Glob("/proc/*")
 	if err != nil {
-		return out, err
+		return err
 	}
 	for _, f := range files {
 		if numeric(path.Base(f)) {
-			p, err := LoadProcStat(f + "/stat")
+			err := fun(f)
 			if err != nil {
-				return out, err
+				return err
 			}
-			out = append(out, p)
 		}
 	}
-	return out, nil
+	return nil
+}
+
+func LoadProcStats() ([]*ProcStat, error) {
+	defer benchmark("load proc stat")()
+	out := []*ProcStat{}
+
+	err := eachProcDir(func(f string) error {
+		p, err := LoadProcStat(f + "/stat")
+		if err != nil {
+			return err
+		}
+		out = append(out, p)
+		return nil
+	})
+	return out, err
 }
 
 func LoadProcStat(path string) (*ProcStat, error) {

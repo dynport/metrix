@@ -3,8 +3,31 @@ package metrix
 import (
 	"io"
 	"io/ioutil"
+	"os"
 	"strings"
 )
+
+func LoadProcCmdlines() ([]*ProcCmdline, error) {
+	defer benchmark("load proc cmdlines")()
+	out := []*ProcCmdline{}
+	err := eachProcDir(func(dir string) error {
+		p := &ProcCmdline{}
+		f, err := os.Open(dir + "/cmdline")
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+		err = p.Load(f)
+		if err != nil {
+			return err
+		}
+		if p.Cmd != "" {
+			out = append(out, p)
+		}
+		return nil
+	})
+	return out, err
+}
 
 type ProcCmdline struct {
 	Cmd  string   `json:"cmd,omitempty"`
