@@ -18,7 +18,8 @@ type Disk struct {
 	MountedOn  string
 }
 
-func Disks() ([]*Disk, error) {
+func LoadDisks() ([]*Disk, error) {
+	defer benchmark("load disks")()
 	c := exec.Command("df", "-k")
 	out, e := c.StdoutPipe()
 	if e != nil {

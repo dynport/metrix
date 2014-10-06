@@ -32,6 +32,7 @@ type Stat struct {
 }
 
 func LoadStat() (*Stat, error) {
+	defer benchmark("load stat")()
 	f, e := os.Open("/proc/stat")
 	if e != nil {
 		return nil, e

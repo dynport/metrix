@@ -8,6 +8,7 @@ import (
 )
 
 func LoadMeminfo() (*Meminfo, error) {
+	defer benchmark("load meminfo")()
 	f, e := os.Open("/proc/meminfo")
 	if e != nil {
 		return nil, e

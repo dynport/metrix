@@ -27,6 +27,7 @@ type LoadAvg struct {
 }
 
 func LoadLoadAvg() (*LoadAvg, error) {
+	defer benchmark("load loadavg")()
 	f, e := os.Open("/proc/loadavg")
 	if e != nil {
 		return nil, e
