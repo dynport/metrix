@@ -28,6 +28,7 @@ func TestParseProcStat(t *testing.T) {
 	expect(p.RSS).ToEqual(262)
 	expect(p.VSize).ToEqual(24223744)
 	expect(p.RSSlim).ToEqual(0)
+	expect(p.StatStartTime).ToEqual(1301)
 }
 
 func TestNumeric(t *testing.T) {
