@@ -22,13 +22,13 @@ const (
 )
 
 type Stat struct {
-	Cpu              *CpuStat
-	Cpus             []*CpuStat
-	ContextSwitches  int64
-	BootTime         int64
-	Processes        int64
-	ProcessRunning   int64
-	ProcessesBlocked int64
+	Cpu              *CpuStat   `json:"cpu,omitempty"`
+	Cpus             []*CpuStat `json:"cpus,omitempty"`
+	ContextSwitches  int64      `json:"context_switches,omitempty"`
+	BootTime         int64      `json:"boot_time,omitempty"`
+	Processes        int64      `json:"processes,omitempty"`
+	ProcessRunning   int64      `json:"process_running,omitempty"`
+	ProcessesBlocked int64      `json:"processes_blocked,omitempty"`
 }
 
 func LoadStat() (*Stat, error) {
@@ -86,17 +86,17 @@ func (s *Stat) Load(in io.Reader) error {
 }
 
 type CpuStat struct {
-	Id        int
-	User      int64
-	Nice      int64
-	System    int64
-	Idle      int64
-	IOWait    int64
-	IRQ       int64
-	SoftIRQ   int64
-	Steal     int64
-	Guest     int64
-	QuestNice int64
+	Id        int   `json:"id,omitempty"`
+	User      int64 `json:"user,omitempty"`
+	Nice      int64 `json:"nice,omitempty"`
+	System    int64 `json:"system,omitempty"`
+	Idle      int64 `json:"idle,omitempty"`
+	IOWait    int64 `json:"io_wait,omitempty"`
+	IRQ       int64 `json:"irq,omitempty"`
+	SoftIRQ   int64 `json:"soft_irq,omitempty"`
+	Steal     int64 `json:"steal,omitempty"`
+	Guest     int64 `json:"guest,omitempty"`
+	QuestNice int64 `json:"quest_nice,omitempty"`
 }
 
 func (stat *CpuStat) Load(parts []string) error {

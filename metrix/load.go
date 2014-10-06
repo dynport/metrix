@@ -18,12 +18,12 @@ const (
 )
 
 type LoadAvg struct {
-	Min1             float64
-	Min5             float64
-	Min15            float64
-	RunnableEntities int64
-	ExistingEntities int64
-	MostRecentPid    int
+	Min1             float64 `json:"min1,omitempty"`
+	Min5             float64 `json:"min5,omitempty"`
+	Min15            float64 `json:"min15,omitempty"`
+	RunnableEntities int64   `json:"runnable_entities,omitempty"`
+	ExistingEntities int64   `json:"existing_entities,omitempty"`
+	MostRecentPid    int     `json:"most_recent_pid,omitempty"`
 }
 
 func LoadLoadAvg() (*LoadAvg, error) {

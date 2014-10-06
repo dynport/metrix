@@ -10,12 +10,12 @@ import (
 )
 
 type Disk struct {
-	Filesystem string
-	Blocks     int64
-	Used       int64
-	Available  int64
-	Use        int
-	MountedOn  string
+	Filesystem string `json:"filesystem,omitempty"`
+	Blocks     int64  `json:"blocks,omitempty"`
+	Used       int64  `json:"used,omitempty"`
+	Available  int64  `json:"available,omitempty"`
+	Use        int    `json:"use,omitempty"`
+	MountedOn  string `json:"mounted_on,omitempty"`
 }
 
 func LoadDisks() ([]*Disk, error) {
