@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"time"
 )
 
 func LoadProcCmdlines() ([]*ProcCmdline, error) {
@@ -12,11 +13,18 @@ func LoadProcCmdlines() ([]*ProcCmdline, error) {
 	out := []*ProcCmdline{}
 	err := eachProcDir(func(dir string) error {
 		p := &ProcCmdline{}
-		f, err := os.Open(dir + "/cmdline")
+		localPath := dir + "/cmdline"
+		f, err := os.Open(localPath)
 		if err != nil {
 			return err
 		}
 		defer f.Close()
+
+		stat, err := f.Stat()
+		if err != nil {
+			return err
+		}
+		p.StartedAt = stat.ModTime().UTC()
 		err = p.Load(f)
 		if err != nil {
 			return err
@@ -30,8 +38,9 @@ func LoadProcCmdlines() ([]*ProcCmdline, error) {
 }
 
 type ProcCmdline struct {
-	Cmd  string   `json:"cmd,omitempty"`
-	Args []string `json:"args,omitempty"`
+	Cmd       string    `json:"cmd,omitempty"`
+	Args      []string  `json:"args,omitempty"`
+	StartedAt time.Time `json:"started_at,omitempty"`
 }
 
 func (p *ProcCmdline) Load(in io.Reader) error {
