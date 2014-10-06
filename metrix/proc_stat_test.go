@@ -3,10 +3,12 @@ package metrix
 import (
 	"os"
 	"testing"
+
+	"github.com/dynport/dgtk/expect"
 )
 
 func TestParseProcStat(t *testing.T) {
-	expect := New(t)
+	expect := expect.New(t)
 	f, e := os.Open("fixtures/proc_stat.txt")
 	expect(e).ToBeNil()
 	defer f.Close()
@@ -29,7 +31,7 @@ func TestParseProcStat(t *testing.T) {
 }
 
 func TestNumeric(t *testing.T) {
-	expect := New(t)
+	expect := expect.New(t)
 	expect(numeric("1234")).ToEqual(true)
 	expect(numeric("1")).ToEqual(true)
 	expect(numeric("")).ToEqual(false)

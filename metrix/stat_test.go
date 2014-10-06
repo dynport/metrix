@@ -3,10 +3,12 @@ package metrix
 import (
 	"os"
 	"testing"
+
+	"github.com/dynport/dgtk/expect"
 )
 
 func TestStat(t *testing.T) {
-	expect := New(t)
+	expect := expect.New(t)
 	f, e := os.Open("fixtures/stat.txt")
 	expect(e).ToBeNil()
 	defer f.Close()

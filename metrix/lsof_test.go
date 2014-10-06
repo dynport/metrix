@@ -3,10 +3,12 @@ package metrix
 import (
 	"os"
 	"testing"
+
+	"github.com/dynport/dgtk/expect"
 )
 
 func TestOpenFiles(t *testing.T) {
-	expect := New(t)
+	expect := expect.New(t)
 	f, e := os.Open("fixtures/lsof.txt")
 	expect(e).ToBeNil()
 	defer f.Close()

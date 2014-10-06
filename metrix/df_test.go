@@ -3,10 +3,12 @@ package metrix
 import (
 	"os"
 	"testing"
+
+	"github.com/dynport/dgtk/expect"
 )
 
 func TestParseDf(t *testing.T) {
-	expect := New(t)
+	expect := expect.New(t)
 	f, e := os.Open("fixtures/df.txt")
 	expect(e).ToBeNil()
 	defer f.Close()
