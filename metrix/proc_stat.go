@@ -78,7 +78,7 @@ func eachProcDir(fun func(p string) error) error {
 		if numeric(path.Base(f)) {
 			err := fun(f)
 			if err != nil {
-				return err
+				logger.Printf("ERROR: %q", err)
 			}
 		}
 	}
