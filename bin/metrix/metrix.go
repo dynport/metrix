@@ -1,12 +1,9 @@
 package main
 
 import (
-	"compress/gzip"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
-	"path"
 	"strings"
 	"time"
 
@@ -45,30 +42,7 @@ func snapshot() error {
 	if err != nil {
 		return err
 	}
-	hostname, err := os.Hostname()
-	if err != nil {
-		return err
-	}
-	localPath := "/data/metrix/snapshots/" + time.Now().UTC().Format("2006/01/02/15/2006-01-02T150405") + "-" + hostname + ".json.gz"
-	logger.Printf("writing snapshot to %s", localPath)
-	tmpPath := localPath + ".tmp"
-	err = os.MkdirAll(path.Dir(tmpPath), 0755)
-	if err != nil {
-		return err
-	}
-	f, err := os.Create(tmpPath)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	gz := gzip.NewWriter(f)
-	defer gz.Close()
-	enc := json.NewEncoder(gz)
-	err = enc.Encode(s)
-	if err != nil {
-		return err
-	}
-	return os.Rename(tmpPath, localPath)
+	return s.Store("/data/metrix")
 }
 
 func procStats() error {

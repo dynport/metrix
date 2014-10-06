@@ -3,8 +3,27 @@ package metrix
 import (
 	"bufio"
 	"io"
+	"os/exec"
 	"strings"
 )
+
+func LoadEc2Metadata() (*Ec2Metadata, error) {
+	c := exec.Command("ec2metadata")
+	out, err := c.StdoutPipe()
+	if err != nil {
+		return nil, err
+	}
+	defer out.Close()
+	err = c.Start()
+	if err != nil {
+		return nil, err
+	}
+	em := &Ec2Metadata{}
+	if err := em.Load(out); err != nil {
+		return nil, err
+	}
+	return em, nil
+}
 
 type Ec2Metadata struct {
 	AvailabilityZone string `json:"availability_zone,omitempty"`
