@@ -4,6 +4,8 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -11,9 +13,14 @@ import (
 func LoadProcCmdlines() ([]*ProcCmdline, error) {
 	defer benchmark("load proc cmdlines")()
 	out := []*ProcCmdline{}
-	err := eachProcDir(func(dir string) error {
+	var err error
+	err = eachProcDir(func(dir string) error {
 		p := &ProcCmdline{}
 		localPath := dir + "/cmdline"
+		p.Pid, err = strconv.Atoi(path.Base(dir))
+		if err != nil {
+			return err
+		}
 		f, err := os.Open(localPath)
 		if err != nil {
 			return err
@@ -38,6 +45,7 @@ func LoadProcCmdlines() ([]*ProcCmdline, error) {
 }
 
 type ProcCmdline struct {
+	Pid       int       `json:"pid,omitempty"`
 	Cmd       string    `json:"cmd,omitempty"`
 	Args      []string  `json:"args,omitempty"`
 	StartedAt time.Time `json:"started_at,omitempty"`
