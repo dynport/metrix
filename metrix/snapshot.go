@@ -9,14 +9,15 @@ import (
 )
 
 type Snapshot struct {
-	Hostname     string         `json:"hostname,omitempty"`
-	Ec2Metadata  *Ec2Metadata   `json:"ec2_metadata,omitempty"`
 	Disks        []*Disk        `json:"disks,omitempty"`
+	Ec2Metadata  *Ec2Metadata   `json:"ec2_metadata,omitempty"`
+	Hostname     string         `json:"hostname,omitempty"`
 	LoadAvg      *LoadAvg       `json:"load_avg,omitempty"`
 	Meminfo      *Meminfo       `json:"meminfo,omitempty"`
-	ProcStats    []*ProcStat    `json:"proc_stats,omitempty"`
 	ProcCmdlines []*ProcCmdline `json:"proc_cmdlines,omitempty"`
+	ProcStats    []*ProcStat    `json:"proc_stats,omitempty"`
 	Stat         *Stat          `json:"stat,omitempty"`
+	TakenAt      time.Time      `json:"taken_at,omitempty"`
 }
 
 func (s *Snapshot) Load() error {
@@ -28,13 +29,24 @@ func (s *Snapshot) Load() error {
 		s.loadProcStats,
 		s.loadProcCmdlines,
 		s.loadStat,
+		s.loadTakenAt,
+		s.loadHostname,
 	}
 	for _, f := range funcs {
-		err := f()
-		if err != nil {
+		if err := f(); err != nil {
 			return err
 		}
 	}
+	return nil
+}
+
+func (s *Snapshot) loadHostname() (err error) {
+	s.Hostname, err = os.Hostname()
+	return err
+}
+
+func (s Snapshot) loadTakenAt() error {
+	s.TakenAt = time.Now().UTC()
 	return nil
 }
 
