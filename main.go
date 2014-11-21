@@ -6,7 +6,7 @@ type Config struct {
 	OpenTSDBUrl string `json:"opentsdb_url"`
 }
 
-var OUTPUTS = []string{"graphite", "opentsdb", "amqp"}
+var OUTPUTS = []string{"graphite", "opentsdb", "amqp","influxdb"}
 
 func processCollector(mh *MetricHandler, output *OutputHandler, c MetricCollector) (e error) {
 	all, e := mh.Collect(c)
@@ -26,6 +26,7 @@ const (
 	OPENTSDB = "opentsdb"
 	GRAPHITE = "graphite"
 	AMQP     = "amqp"
+	INFLUXDB = "influxdb"
 )
 
 func init() {
@@ -33,6 +34,7 @@ func init() {
 	parser.Add(KEYS, "true", "Only list all known keys")
 	parser.AddKey(OPENTSDB, "Report metrics to OpenTSDB host.\nEXAMPLE: opentsdb.host:4242")
 	parser.AddKey(AMQP, "Report metrics to AMQP host.\nEXAMPLE: amqp.host:5672")
+	parser.AddKey(INFLUXDB, "Report metrics to InfluxDB host.\nEXAMPLE: user:password@influxdb.host:8086/database")
 	parser.AddKey(GRAPHITE, "Report metrics to Graphite host.\nEXAMPLE: graphite.host:2003")
 	parser.AddKey(HOSTNAME, "Hostname to be used for tagging. If blank the local hostname is used")
 }
@@ -47,6 +49,7 @@ func main() {
 		OpenTSDBAddress: parser.Get(OPENTSDB),
 		GraphiteAddress: parser.Get(GRAPHITE),
 		AmqpAddress:     parser.Get(AMQP),
+		InfluxDBAddress:     parser.Get(INFLUXDB),
 	}
 	collectors := map[string]MetricCollector{
 		CPU:           &Cpu{},     // migrated

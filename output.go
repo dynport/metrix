@@ -11,6 +11,7 @@ type OutputHandler struct {
 	OpenTSDBAddress string
 	GraphiteAddress string
 	AmqpAddress     string
+	InfluxDBAddress string
 	Hostname        string
 }
 
@@ -31,6 +32,15 @@ func (o *OutputHandler) WriteMetrics(all []*Metric) (e error) {
 	if o.GraphiteAddress != "" {
 		e = SendMetricsToGraphite(o.GraphiteAddress, all, o.Hostname)
 		sent = true
+	}
+
+	if o.InfluxDBAddress != "" {
+		e = PublishMetricsWithInfluxDB(o.InfluxDBAddress, all, o.Hostname)
+		if e != nil {
+			logger.Printf("ERROR: %q", e)
+		} else {
+			sent = true
+		}
 	}
 
 	if o.AmqpAddress != "" {
