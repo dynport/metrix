@@ -17,10 +17,10 @@ func PublishMetricsWithInfluxDB(address string, metrics []*Metric, hostname stri
 	series := []*influxClient.Series{}
 	//TODO, test address componets ...
 	u, err := url.Parse("addmissing://"+address)
-    if err != nil {
-        panic(err)
-    }
-    p, _ := u.User.Password()
+	if err != nil {
+		return err
+	}
+	p, _ := u.User.Password()
 
 	c, err := influxClient.NewClient(&influxClient.ClientConfig{
 		Username: u.User.Username(),
@@ -29,7 +29,7 @@ func PublishMetricsWithInfluxDB(address string, metrics []*Metric, hostname stri
 		Database: u.Path[1:],
 	})
 	if err != nil {
-		panic(err)
+		return err
 	}
 	for _, m := range metrics {
 		columns := []string{"time", "value", "host"}
@@ -48,7 +48,7 @@ func PublishMetricsWithInfluxDB(address string, metrics []*Metric, hostname stri
 	}
 	if len(series) > 0 {
 		if err := c.WriteSeries(series); err != nil {
-			fmt.Printf("ERROR: %s\n",err)
+			return err
 		} else {
 			fmt.Printf("sent %d metrics in %.06f to influxdb://%s/%s \n", len(series), time.Now().Sub(started).Seconds(),u.Host,u.Path[1:])
 		}
