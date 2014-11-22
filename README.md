@@ -430,7 +430,12 @@ Used tags are `database`, `state`, `address`, `port`, `local_address`, `local_po
 ## Help
     USAGE: ./bin/metrix
       --help           	Print this usage page                                               
-      --keys           	Only list all known keys                                            
+      --keys           	Only list all known keys    
+
+      --influxdb        Report metrics to InfluxDB host.                                    
+                        EXAMPLE: user:password@influxdb.host:8086/database                  
+
+                                        
       --opentsdb       	Report metrics to OpenTSDB host.                                    
                         EXAMPLE: opentsdb.host:4242                                         
 
