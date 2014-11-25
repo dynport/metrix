@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 	"net/url"
+	"syscall"
 
 	influxClient "github.com/influxdb/influxdb/client"
 )
@@ -13,7 +14,9 @@ import (
 func PublishMetricsWithInfluxDB(address string, metrics []*Metric, hostname string) (e error) {
 
 	started := time.Now()
-	taken := started.UTC().Unix()
+    var tv syscall.Timeval
+	syscall.Gettimeofday(&tv)
+	taken := (int64(tv.Sec)*1e3 + int64(tv.Usec)/1e3)
 	series := []*influxClient.Series{}
 	//TODO, test address componets ...
 	u, err := url.Parse("addmissing://"+address)
