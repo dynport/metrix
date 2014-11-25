@@ -466,4 +466,7 @@ Used tags are `database`, `state`, `address`, `port`, `local_address`, `local_po
                         DEFAULT: 127.0.0.1:6432                                             
 
       --nginx          	Collect nginx metrics                                               
-                        DEFAULT: http://127.0.0.1:8080                                      
+                        DEFAULT: http://127.0.0.1:8080  
+
+      --suricata        dump Suricata's performance counters                                
+                        DEFAULT: /usr/local/var/run/suricata/suricata-command.socket                                    
