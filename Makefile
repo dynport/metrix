@@ -2,8 +2,16 @@ GIT_COMMIT = $(shell git rev-parse --short HEAD)
 GIT_STATUS = $(shell test -n "`git status --porcelain`" && echo "+CHANGES")
 BUILD_CMD = go build -ldflags "-X main.GITCOMMIT $(GIT_COMMIT)$(GIT_STATUS)"
 
-default:
-	go get github.com/dynport/metrix
+default: build vet test
+
+vet:
+	go vet ./...
+
+test:
+	go test ./...
+
+build:
+	go get ./...
 
 all: clean test all
 	./bin/metrix --cpu --memory --net --df --disk --processes --files
@@ -23,9 +31,6 @@ clean:
 release:
 	GOOS=linux  GOARCH=amd64         bash ./scripts/release.sh
 	GOOS=darwin GOARCH=amd64         bash ./scripts/release.sh
-
-test:
-	go test -v
 
 jenkins: clean install_dependencies test all
 	PROC_ROOT=./fixtures ./bin/metrix --loadavg --disk --memory --processes --cpu
