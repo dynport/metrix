@@ -129,11 +129,12 @@ type ProcStat struct {
 	Cstime  int64 `json:"cstime,omitempty,omitempty"`
 	//Priority   int64 `json:"//priority,omitempty"`
 	//Nice       int64 `json:"//nice,omitempty"`
-	NumThreads    int64 `json:"num_threads,omitempty,omitempty"`
-	VSize         int64 `json:"v_size,omitempty,omitempty"`
-	RSS           int64 `json:"rss,omitempty,omitempty"`
-	RSSlim        int64 `json:"rs_slim,omitempty,omitempty"`
-	StatStartTime int64 `json:"stat_start_time,omitempty"`
+	NumThreads              int64 `json:"num_threads,omitempty,omitempty"`
+	VSize                   int64 `json:"v_size,omitempty,omitempty"`
+	RSS                     int64 `json:"rss,omitempty,omitempty"`
+	RSSlim                  int64 `json:"rs_slim,omitempty,omitempty"`
+	StatStartTime           int64 `json:"stat_start_time,omitempty"`
+	StatDelayacctBlkioTicks int64 `json:"stat_delayacct_blkio_ticks,omitempty"`
 }
 
 func (p *ProcStat) Load(in io.Reader) error {
@@ -179,6 +180,8 @@ func (p *ProcStat) Load(in io.Reader) error {
 				p.NumThreads = value
 			case fieldProcStatRSS:
 				p.RSS = value
+			case fieldProcStatDelayacct_blkio_ticks:
+				p.StatDelayacctBlkioTicks = value
 			case fieldProcStatRSSlim:
 				p.RSSlim = value
 			case fieldProcStatStartTime:
