@@ -272,7 +272,7 @@ const statSQL = `
 `
 
 func (p *PostgreSQLStats) StatDatabases() (ret []*PgDatabaseStat, e error) {
-	rows, e := p.DB.Query(fmt.Sprintf(statSQL, p.Database))
+	rows, e := p.DB.Query(fmt.Sprintf(statSQL, p.Database()))
 	if e != nil {
 		return
 	}

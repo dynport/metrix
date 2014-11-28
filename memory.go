@@ -73,7 +73,7 @@ func (m *Memory) Load(b []byte) error {
 			valueString := strings.Fields(parts[1])[0]
 			value, e := strconv.ParseInt(valueString, 10, 64)
 			if e != nil {
-				log.Printf("error parsing %q to int64: %e", valueString, e)
+				log.Printf("error parsing %q to int64: %s", valueString, e)
 				continue
 			}
 			switch key {

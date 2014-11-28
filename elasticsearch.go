@@ -97,7 +97,7 @@ type ElasticSearchFlushOrRefresh struct {
 }
 
 type ElasticSearchDocs struct {
-	NumDocs     int64 `json"num_docs"`
+	NumDocs     int64 `json:"num_docs"`
 	MaxDoc      int64 `json:"max_doc"`
 	DeletedDocs int64 `json:"deleted_docs"`
 }
