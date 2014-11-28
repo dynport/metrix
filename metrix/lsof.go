@@ -82,6 +82,7 @@ var fileMapping = map[string]int{
 	"K": taskId,
 }
 
+// use this with "lsof -F"
 func (r *OpenFiles) Load(in io.Reader) error {
 	scanner := bufio.NewScanner(in)
 	stats := Map{}
