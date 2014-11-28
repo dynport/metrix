@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"time"
 	"net"
 	"io"
 	"encoding/json"
@@ -58,25 +58,26 @@ func getCountersFromSocket(socketName string) (counts map[string]map[string]int6
 	defer conn.Close()
 
 	// see https://github.com/inliniac/suricata/blob/94571c5dd28858ff68c44b648fd41c5d87c0e28d/src/unix-manager.c#L288
-	_, err = fmt.Fprint(conn, "{\"version\": \"0.1\"}")
+	_, err = conn.Write([]byte("{\"version\": \"0.1\"}"))
 	if err != nil {
 			return nil, errors.New("can not send version :: "+err.Error())
 	}
+	time.Sleep(100 * time.Millisecond)
 	var buf [128]byte
 	_, err = conn.Read(buf[0:])
 	if err != nil {
 			// see https://github.com/inliniac/suricata/blob/94571c5dd28858ff68c44b648fd41c5d87c0e28d/src/unix-manager.c#L319
 			return nil, errors.New("got kick on version :: "+err.Error())
 	}
-	_, err = fmt.Fprint(conn, "{\"command\": \"dump-counters\"}")
+	_, err = conn.Write([]byte("{\"command\": \"dump-counters\"}"))
 	if err != nil {
 		return nil, errors.New("can not send command :: "+err.Error())
 	}
-	
+	time.Sleep(100 * time.Millisecond)
 	data := ""
 	// read anser for command
 	//  see https://github.com/inliniac/suricata/blob/672049632431bb695f56798c9c5f196afcf2fb27/scripts/suricatasc/src/suricatasc.py#L83
-	for i := 0; i < 32; i++ {
+	for i := 0; i < 16; i++ {
 		var buf2 [4096]byte
 		result2, err := conn.Read(buf2[0:])
 		if err != nil {
@@ -101,6 +102,7 @@ func getCountersFromSocket(socketName string) (counts map[string]map[string]int6
 				return nil, errors.New(data) 
 			}
 		}
+		time.Sleep(10 * time.Millisecond)
 	}
 	return nil, errors.New("max limit for loop")
 }
