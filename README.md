@@ -430,7 +430,12 @@ Used tags are `database`, `state`, `address`, `port`, `local_address`, `local_po
 ## Help
     USAGE: ./bin/metrix
       --help           	Print this usage page                                               
-      --keys           	Only list all known keys                                            
+      --keys           	Only list all known keys    
+
+      --influxdb        Report metrics to InfluxDB host.                                    
+                        EXAMPLE: user:password@influxdb.host:8086/database                  
+
+                                        
       --opentsdb       	Report metrics to OpenTSDB host.                                    
                         EXAMPLE: opentsdb.host:4242                                         
 
@@ -461,4 +466,7 @@ Used tags are `database`, `state`, `address`, `port`, `local_address`, `local_po
                         DEFAULT: 127.0.0.1:6432                                             
 
       --nginx          	Collect nginx metrics                                               
-                        DEFAULT: http://127.0.0.1:8080                                      
+                        DEFAULT: http://127.0.0.1:8080  
+
+      --suricata        dump Suricata's performance counters                                
+                        DEFAULT: /usr/local/var/run/suricata/suricata-command.socket                                    
